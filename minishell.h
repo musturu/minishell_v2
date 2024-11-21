@@ -68,9 +68,9 @@ typedef struct s_cmd {
 /*TOKENIZER*/
 void    go_next(char **str);
 int space_until_next(char   *str);
-t_list    *tokenize(char   *str, t_list  **list, char **env);
+t_list    *tokenize(char   *str, t_list  **list);
 char	*squote_manager(char *str);
-char	*dquote_manager(char *str, char **env);
+char	*dquote_manager(char *str);
 
 /*debug*/
 void    print_tokens(t_list *list);

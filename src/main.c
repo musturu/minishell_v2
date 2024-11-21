@@ -99,6 +99,7 @@ void    read_input(char **env)
         tlist = tokenize(str, &tlist, env); //add guard
 		printf("exited tokenizer\n");
         print_tokens(tlist);
+        // expand(tlist, env);
         plist = parser(&tlist, &plist);
 		printf("exited parser\n");
 		if (plist == NULL)

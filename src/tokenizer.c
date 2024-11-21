@@ -6,7 +6,7 @@
 /*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/11/20 18:54:42 by lmoricon         ###   ########.fr       */
+/*   Updated: 2024/11/20 19:41:05 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_REDIR_IN);
     if (!ft_strncmp(str, "&", 1)) //NOT NEEDED
         return (TOKEN_AND);
-    if (!ft_strncmp(str, "$", 1))
-        return (TOKEN_DOLLAR);
+    // if (!ft_strncmp(str, "$", 1))
+    //     return (TOKEN_DOLLAR);
     if (!ft_strncmp(str, "(", 1)) //NOT NEEDED
         return (TOKEN_OPEN_P);
     if (!ft_strncmp(str, ")", 1)) //NOT NEEDED
@@ -46,7 +46,7 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_WORD);
 }
 
-static char    *get_token_value(char   *str, TokenType type, char **env)
+static char    *get_token_value(char   *str, TokenType type)
 {
     if (type == TOKEN_EOF)
         return (ft_strdup("EOF"));
@@ -59,12 +59,12 @@ static char    *get_token_value(char   *str, TokenType type, char **env)
     else if (type == TOKEN_SQUOTE)
 		return (squote_manager(str));
     else if (type == TOKEN_DBQUOTE)
-        return (dquote_manager(str, env));
+        return (dquote_manager(str));
     else
         return NULL;
 }
 
-	static int append_token(char **str, t_list **lst, char **env)
+	static int append_token(char **str, t_list **lst)
 {
     token   *tok;
 
@@ -72,7 +72,7 @@ static char    *get_token_value(char   *str, TokenType type, char **env)
     if (!tok)
         return (0);
     tok->type = get_token_type(*str);
-    tok->value = get_token_value(*str, tok->type, env);
+    tok->value = get_token_value(*str, tok->type);
     if (!tok->value)
         return (0);
     *str += ft_strlen(tok->value);
@@ -85,16 +85,16 @@ static char    *get_token_value(char   *str, TokenType type, char **env)
 
 //to add : EXPANDER
 
-t_list    *tokenize(char   *str, t_list  **list, char **env)
+t_list    *tokenize(char   *str, t_list  **list)
 {
     go_next(&str);
     if (!*str)
     {
-        if (!append_token(&str, list, env))
+        if (!append_token(&str, list))
             return (NULL);
         return (*list);
     }
-    if (!append_token(&str, list, env))
+    if (!append_token(&str, list))
         return (NULL);
-    return (tokenize(str, list, env));
+    return (tokenize(str, list));
 }

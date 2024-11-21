@@ -110,35 +110,27 @@ char	*expand(char *str, char **env, int count)
 }
 
 
-char	*dquote_manager(char *str, char **env)
+char	*dquote_manager(char *str)
 {
-	int		i;
+		int		i;
 	char	*first;
 	char	*ret;
 	char	*second;
-	static int		count;
 
-	count = 0;
 	i = 1;
-	if (!count_quotes(str, '\"'))
+	if (!count_quotes(str, '"'))
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == '\"' || str[i] == '$')
+		if (str[i] == '"')
 			break ;
 		i++;
 	}
 	first = (ft_substr(str, 1, i - 1));
-	printf("first1 = %s\n", first);
-	if (ft_strchr(str, '$'))
-	{
-		second = expand((ft_strchr(str, '$') + 1), env, count);
-		printf("second = %s\n", second);
-		while (ft_strchr(second, '$'))
-			second = expand((ft_strchr(second, '$') + 1), env, count);
-	}
+	str += i + 1;
 	while (!ft_isspace(str[i]))
 		i++;
+	second = ft_substr(str, 0, i - 1);
 	ret = ft_strjoin(first, second);
 	free(first);
 	free(second);
