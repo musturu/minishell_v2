@@ -96,10 +96,12 @@ void    read_input(char **env)
         add_history(str);
         if (blank_check(str))
             continue;
-        tlist = tokenize(str, &tlist, env); //add guard
+        tlist = tokenize(str, &tlist); //add guard
 		printf("exited tokenizer\n");
         print_tokens(tlist);
-        // expand(tlist, env);
+        expand(&tlist, env);
+        printf("EXIT EXPANDER\n");
+        print_tokens(tlist);
         plist = parser(&tlist, &plist);
 		printf("exited parser\n");
 		if (plist == NULL)

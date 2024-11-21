@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/11/20 19:41:05 by lmoricon         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:58:24 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_REDIR_IN);
     if (!ft_strncmp(str, "&", 1)) //NOT NEEDED
         return (TOKEN_AND);
-    // if (!ft_strncmp(str, "$", 1))
-    //     return (TOKEN_DOLLAR);
+    if (!ft_strncmp(str, "$", 1))
+         return (TOKEN_DOLLAR);
     if (!ft_strncmp(str, "(", 1)) //NOT NEEDED
         return (TOKEN_OPEN_P);
     if (!ft_strncmp(str, ")", 1)) //NOT NEEDED
@@ -50,8 +50,10 @@ static char    *get_token_value(char   *str, TokenType type)
 {
     if (type == TOKEN_EOF)
         return (ft_strdup("EOF"));
-    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_SPACE)
+    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_SPACE)
         return (ft_substr(str, 0, 1));
+    else if (type == TOKEN_DOLLAR)
+        return (ft_substr(str, 0, space_until_next(str)));
     else if (type != TOKEN_WORD && type != TOKEN_DBQUOTE && type != TOKEN_SQUOTE)
         return (ft_substr(str, 0, 2));
     else if (type == TOKEN_WORD)

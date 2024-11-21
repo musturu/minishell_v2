@@ -6,7 +6,7 @@
 #    By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by lmoricon          #+#    #+#              #
-#    Updated: 2024/08/20 17:55:45 by mamerlin         ###   ########.fr        #
+#    Updated: 2024/11/21 14:47:23 by mamerlin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c utils.c memory_management.c eggxecutor.c utils_exec.c utils_token_quotes.c
+SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c utils.c memory_management.c eggxecutor.c utils_exec.c utils_token_quotes.c expander.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
