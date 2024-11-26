@@ -6,7 +6,7 @@
 /*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/11/21 14:58:24 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:35:41 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 static TokenType   get_token_type(char *str)
 {
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHH STR: %s\n", str);
     if (!*str)
         return (TOKEN_EOF);
+/*
+    if (ft_contains_dollar(str))
+         return (TOKEN_DOLLAR);
+*/
+    if (!ft_strncmp(str, "$", 1))
+         return (TOKEN_DOLLAR);
     if (!ft_strncmp(str, "\"", 1))
         return (TOKEN_DBQUOTE);
     if (!ft_strncmp(str, "\'", 1))
@@ -32,8 +39,6 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_REDIR_IN);
     if (!ft_strncmp(str, "&", 1)) //NOT NEEDED
         return (TOKEN_AND);
-    if (!ft_strncmp(str, "$", 1))
-         return (TOKEN_DOLLAR);
     if (!ft_strncmp(str, "(", 1)) //NOT NEEDED
         return (TOKEN_OPEN_P);
     if (!ft_strncmp(str, ")", 1)) //NOT NEEDED
@@ -73,6 +78,9 @@ static char    *get_token_value(char   *str, TokenType type)
     tok = ft_calloc(1, sizeof(token));
     if (!tok)
         return (0);
+    printf("-------------------------------------------\n");
+    printf("TOKEN TYPE: %i e STR : %s\n", get_token_type(*str), *str);
+    printf("-------------------------------------------\n");
     tok->type = get_token_type(*str);
     tok->value = get_token_value(*str, tok->type);
     if (!tok->value)

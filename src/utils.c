@@ -45,3 +45,16 @@ void	ft_lst_remove_node(t_list **lst, t_list *node, void (*del)(void *))
 		current = current->next;
 	}
 }
+
+int	ft_contains_dollar(const char *str)
+{
+    if (!str)
+        return (0);
+    while (*str)
+    {
+        if (*str == '$')
+            return (1);
+        str++;
+    }
+    return (0);
+}

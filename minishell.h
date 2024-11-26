@@ -104,5 +104,6 @@ int ft_istokenchar(char c);
 char is_builtin(char *cmd);
 void ft_lst_remove_node(t_list **lst, t_list *node, void (*del)(void *));
 int ft_isspace(char c);
+int ft_contains_dollar(const char *str);
 
 #endif

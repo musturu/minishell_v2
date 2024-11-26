@@ -1,70 +1,124 @@
 #include "../minishell.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+static char *allocate_empty_string(void)
+{
+    char *str;
+
+    str = malloc(1);
+    if (!str)
+        return (NULL);
+    *str = '\0';
+    return (str);
+}
+
+static char *get_env_value(char *start, char **env)
+{
+    int env_index;
+
+    env_index = str_to_env_index(env, start + 1);
+    if (env_index != -1)
+        return (ft_strdup(env[env_index] + ft_strlen(start)));
+    return (ft_strdup(""));
+}
+
+static char *append_to_result(char *result, const char *text, size_t length)
+{
+    char *new_result;
+    size_t current_len;
+
+    current_len = strlen(result);
+    new_result = realloc(result, current_len + length + 1);
+    if (!new_result)
+        return (NULL);
+    strncat(new_result, text, length);
+    return (new_result);
+}
+
+static char *process_expansion(char *result, char **next_part, char *start,
+                               char **env)
+{
+    char *env_value;
+    char *end;
+    char saved;
+
+    end = start + 1;
+    while (*end && *end != '$' && !isspace(*end))
+        end++;
+    saved = *end;
+    *end = '\0';
+    env_value = get_env_value(start, env);
+    *end = saved;
+
+    // Append part before '$' to result
+    result = append_to_result(result, *next_part, start - *next_part);
+    if (!result)
+        return (NULL);
+
+    // Append the environment variable's value
+    result = append_to_result(result, env_value, strlen(env_value));
+    free(env_value);
+    *next_part = end;
+    return (result);
+}
+
+char *expand_multiple_env(char *input, char **env)
+{
+    char *result;
+    char *next_part;
+    char *start;
+
+    result = allocate_empty_string();
+    if (!result)
+        return (NULL);
+    next_part = input;
+
+    while ((start = strchr(next_part, '$')))
+    {
+        result = process_expansion(result, &next_part, start, env);
+        if (!result)
+            return (NULL);
+    }
+
+    // Append the remaining part of the string after the last '$'
+    result = append_to_result(result, next_part, strlen(next_part));
+    return (result);
+}
+
+static void handle_token_expansion(token *tkn, char **env)
+{
+    int env_index;
+
+    if (strchr(tkn->value, '$'))
+        tkn->value = expand_multiple_env(tkn->value, env);
+    else if (ft_strlen(tkn->value) == 1)
+        tkn->value = ft_strdup("$");
+    else
+    {
+        env_index = str_to_env_index(env, tkn->value + 1);
+        tkn->value = env_index == -1
+            ? ft_strdup("")
+            : ft_strdup(env[env_index] + ft_strlen(tkn->value) + 1);
+    }
+}
 
 t_list *expand(t_list **list, char **env)
 {
-    printf("EXPANDER\n");
-    t_list *tmp = *list;
+    t_list *tmp;
     token *tkn;
 
+    printf("EXPANDER\n");
+    tmp = *list;
     while (tmp)
     {
         tkn = tmp->content;
-        printf("%s - %i\n", tkn->value, tkn->type);
-
         if (tkn->type == TOKEN_DOLLAR)
-        {
-            printf("%s - %i\n", tkn->value, tkn->type);
-            if (strchr(tkn->value + 1, '$'))
-            {
-                char *original = tkn->value;
-                char *result = malloc(1);
-                *result = '\0';
-
-                char *next_part = original;
-                char *start;
-                while ((start = strchr(next_part, '$')))
-                {
-                    char *end = start + 1;
-                    while (*end && *end != '$' && !isspace(*end)) end++;
-
-                    char saved = *end;
-                    *end = '\0';
-					printf("start: %s\n", start);
-                    char *env_value = ft_strdup((env[str_to_env_index(env, start + 1)] + ft_strlen(start)));
-					printf("env_value: %s\n", env_value);
-                    *end = saved;
-
-                    result = realloc(result, strlen(result) + strlen(env_value) + (start - next_part) + 1);
-                    strncat(result, next_part, start - next_part);
-                    strcat(result, env_value);
-
-                    next_part = end;
-                }
-                strcat(result, next_part);
-                free(original);
-                tkn->value = result;
-                tkn->type = TOKEN_WORD;
-            }
-            else if (ft_strlen(tkn->value) == 1)
-            {
-                tkn->value = ft_strdup("$");
-                tkn->type = TOKEN_WORD;
-            }
-            else
-            {
-				if (str_to_env_index(env, tkn->value + 1) == -1)
-				{
-					tkn->value = ft_strdup("");
-					tkn->type = TOKEN_WORD;
-				}
-				else
-				{
-					tkn->value = ft_strdup((env[str_to_env_index(env, tkn->value + 1)] + ft_strlen(tkn->value) + 1));
-					tkn->type = TOKEN_WORD;
-				}
-            }
-        }
+            handle_token_expansion(tkn, env);
+        if (tkn->type != TOKEN_EOF)
+            tkn->type = TOKEN_WORD;
         tmp = tmp->next;
     }
     return (*list);
