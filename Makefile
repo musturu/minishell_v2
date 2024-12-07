@@ -40,7 +40,8 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c utils.c memory_management.c eggxecutor.c utils_exec.c utils_token_quotes.c expander.c
+SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c utils.c memory_management.c eggxecutor.c utils_exec.c utils_token_quotes.c expander.c \
+	  builtin/cd.c builtin/echo.c builtin/exit.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -77,6 +78,7 @@ git: fclean
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)/builtin
 
 re: fclean all
 

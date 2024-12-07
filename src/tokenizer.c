@@ -37,16 +37,8 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_REDIR_OUT);
     if (!ft_strncmp(str, "<", 1))
         return (TOKEN_REDIR_IN);
-    if (!ft_strncmp(str, "&", 1)) //NOT NEEDED
-        return (TOKEN_AND);
-    if (!ft_strncmp(str, "(", 1)) //NOT NEEDED
-        return (TOKEN_OPEN_P);
-    if (!ft_strncmp(str, ")", 1)) //NOT NEEDED
-        return (TOKEN_CLOSE_P);
     // if (!ft_strncmp(str, " ", 1))
     //     return (TOKEN_SPACE);
-    if (!ft_strncmp(str, "\\", 1)) //NOT NEEDED
-        return (TOKEN_BACKSLASH);
     else
         return (TOKEN_WORD);
 }

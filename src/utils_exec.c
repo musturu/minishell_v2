@@ -5,8 +5,19 @@ char	is_builtin(char *cmd)
 {
 	int	len;
 
-	return (0);
 	len = ft_strlen(cmd);
+	if (!ft_strncmp(cmd, "echo", len))
+		return (1);
+	if (!ft_strncmp(cmd, "cd", len))
+		return (1);
+	if (!ft_strncmp(cmd, "env", len))
+		return (1);
+	if (!ft_strncmp(cmd, "exit", len))
+		return (1);
+	if (!ft_strncmp(cmd, "e", len))
+		return (1);
+	if (!ft_strncmp(cmd, "echo", len))
+		return (1);
 	if (!ft_strncmp(cmd, "echo", len))
 		return (1);
 	//add others

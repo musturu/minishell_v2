@@ -116,9 +116,10 @@ t_list *expand(t_list **list, char **env)
     {
         tkn = tmp->content;
         if (tkn->type == TOKEN_DOLLAR)
+		{
             handle_token_expansion(tkn, env);
-        if (tkn->type != TOKEN_EOF)
             tkn->type = TOKEN_WORD;
+		}
         tmp = tmp->next;
     }
     return (*list);

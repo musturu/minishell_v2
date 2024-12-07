@@ -12,8 +12,11 @@
 #include <dirent.h>    // Per opendir, readdir, closedir
 #include <sys/ioctl.h> // Per ioctl
 #include <termios.h>   // Per tcsetattr, tcgetattr
-#include <curses.h>    // Per alcune funzioni termcap
-#include <term.h>      // Per altre funzioni termcap
+//#include <curses.h>    // Per alcune funzioni termcap
+//#include <term.h>      // Per altre funzioni termcap
+
+
+#include "src/builtin/builtin.h"
 
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -98,6 +101,7 @@ void free_token(void *tkn);
 void free_matrix(char **mat);
 
 /*utils*/
+char	*get_env(char **env, char *name);
 char **listomap(char *cmd, t_list **list);
 int str_to_env_index(char **env, char *name);
 int ft_istokenchar(char c);
