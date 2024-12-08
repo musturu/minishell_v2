@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include "builtin.h"
 
-int cd(char **argv, char **env)
+int cd(char **argv)
 {
 	int i;
 	i = 0;
@@ -21,4 +21,3 @@ int cd(char **argv, char **env)
 	}
 	return (chdir(argv[1]));
 }
-

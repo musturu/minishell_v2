@@ -3,6 +3,4 @@
 
 2) da gestire la differenza tra dquote e squote e gli escape char. \
 
-3) non funziona open per creare il file
-
-4) non ce supporto per path relativi ed assolluti, cerca solo in PATH
+3) DOUBLE FREE con comandi non esistenti -> lstclear dei comandi lo fa, da capire dove
