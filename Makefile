@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+         #
+#    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by lmoricon          #+#    #+#              #
-#    Updated: 2024/11/21 14:47:23 by mamerlin         ###   ########.fr        #
+#    Updated: 2024/12/08 20:12:25 by lmoricon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ else ifeq ($(CURRENT_OS), Darwin)
 endif
 
 NAME 		= minishell
-CFLAGS 		= -Wall -Wextra -Werror
+CFLAGS 		= -Wall -Wextra -Werror -g
 CC 			= cc
 SRC_DIR 	= src
 OBJ_DIR 	= obj
@@ -41,7 +41,7 @@ LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
 SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c utils.c memory_management.c eggxecutor.c utils_exec.c utils_token_quotes.c expander.c \
-	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c
+	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c	builtin/export.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 
-
 int env(char **env)
 {
 	int i;
@@ -12,5 +11,3 @@ int env(char **env)
 		printf("%s\n", env[i++]);
 	return (1);
 }
-
-

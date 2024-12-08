@@ -8,5 +8,6 @@ int echo(char **argv);
 int	ft_exit();
 int	pwd();
 int	env(char **env);
+int export(char **argv, char ***env);
 
 #endif
