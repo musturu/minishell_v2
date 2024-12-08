@@ -17,7 +17,7 @@ char	is_builtin(char *cmd)
 		return (1);
 	if (!ft_strncmp(cmd, "pwd", len))
 		return (1);
-	if (!ft_strncmp(cmd, "echo", len))
+	if (!ft_strncmp(cmd, "export", len))
 		return (1);
 	if (!ft_strncmp(cmd, "echo", len))
 		return (1);
@@ -40,8 +40,8 @@ int exec_builtin(char *cmd, char **argv, char **en, int *ret)
 		return ft_exit();
 	if (!ft_strncmp(cmd, "pwd", len))
 		return pwd();
-	if (!ft_strncmp(cmd, "echo", len))
-		return (1);
+	if (!ft_strncmp(cmd, "export", len))
+		return (export(argv, &en));
 	if (!ft_strncmp(cmd, "echo", len))
 		return (1);
 	(void)ret;
@@ -60,7 +60,7 @@ char **listomap(char *cmd, t_list **list)
 
 	size = ft_lstsize(*list);
 	mat = (char **)ft_calloc(sizeof(char *) , (size + 2));
-	mat[0] = cmd;
+	mat[0] = ft_strdup(cmd);
 	i = 1;
 	while ((*list))
 	{
@@ -69,7 +69,5 @@ char **listomap(char *cmd, t_list **list)
 		*list = (*list)->next;
 	}
 	mat[i] = NULL;
-	if (*list)
-		ft_lstclear(list, free);
 	return (mat);
 }
