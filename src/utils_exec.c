@@ -1,4 +1,5 @@
 #include "../minishell.h"
+#include "builtin/builtin.h"
 #include <stdio.h>
 
 char	is_builtin(char *cmd)
@@ -14,7 +15,7 @@ char	is_builtin(char *cmd)
 		return (1);
 	if (!ft_strncmp(cmd, "exit", len))
 		return (1);
-	if (!ft_strncmp(cmd, "e", len))
+	if (!ft_strncmp(cmd, "pwd", len))
 		return (1);
 	if (!ft_strncmp(cmd, "echo", len))
 		return (1);
@@ -24,12 +25,38 @@ char	is_builtin(char *cmd)
 	return (0);
 }
 
+int exec_builtin(char *cmd, char **argv, char **en, int *ret)
+{
+	int	len;
+
+	len = ft_strlen(cmd);
+	if (!ft_strncmp(cmd, "echo", len))
+		return echo(argv);
+	if (!ft_strncmp(cmd, "cd", len))
+		return cd(argv);
+	if (!ft_strncmp(cmd, "env", len))
+		return env(en);
+	if (!ft_strncmp(cmd, "exit", len))
+		return ft_exit();
+	if (!ft_strncmp(cmd, "pwd", len))
+		return pwd();
+	if (!ft_strncmp(cmd, "echo", len))
+		return (1);
+	if (!ft_strncmp(cmd, "echo", len))
+		return (1);
+	(void)ret;
+	//add otherske
+	return (0);
+
+}
+
+
+
 char **listomap(char *cmd, t_list **list)
 {
 	int i;
 	int size;
 	char **mat;
-
 
 	size = ft_lstsize(*list);
 	mat = (char **)ft_calloc(sizeof(char *) , (size + 2));

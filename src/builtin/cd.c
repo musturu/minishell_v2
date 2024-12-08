@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "builtin.h"
 
@@ -6,12 +7,12 @@ int cd(char **argv, char **env)
 {
 	int i;
 	i = 0;
+	(void)env;
 	while (argv[i])
 		i++;
 	if (i == 1)
 	{
-		printf(get_env(env, "HOME"));
-		return (chdir(get_env(env, "HOME")));
+		return (chdir(getenv("HOME")));
 	}
 	if (i != 2)
 	{

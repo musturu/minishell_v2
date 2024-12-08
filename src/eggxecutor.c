@@ -1,5 +1,4 @@
 #include "../minishell.h"
-#include "builtin/builtin.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -59,30 +58,6 @@ static int	redir_in(command *cmd)
 	return (1);
 }
 
-int exec_builtin(char *cmd, char **argv, char **env, int *ret)
-{
-	int	len;
-
-	len = ft_strlen(cmd);
-	if (!ft_strncmp(cmd, "echo", len))
-		return echo(argv, env);
-	if (!ft_strncmp(cmd, "cd", len))
-		return cd(argv, env);
-	if (!ft_strncmp(cmd, "env", len))
-		return 0;
-	if (!ft_strncmp(cmd, "exit", len))
-		return ft_exit(argv, env);
-	if (!ft_strncmp(cmd, "e", len))
-		return (1);
-	if (!ft_strncmp(cmd, "echo", len))
-		return (1);
-	if (!ft_strncmp(cmd, "echo", len))
-		return (1);
-	(void)ret;
-	//add others
-	return (0);
-
-}
 
 
 char	*get_path(char **env, char *command)

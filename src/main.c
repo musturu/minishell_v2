@@ -19,7 +19,6 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-	printf("%s\n", env[1]);
     ft_signals();
     read_input(env);
 }
