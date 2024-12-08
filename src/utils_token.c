@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:35 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/08/20 16:52:39 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/11/20 19:15:20 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int ft_istokenchar(char c)
 {
-    if (c == '|' || c == '>' || c == '<' || c == '&' || c == '$' || c == ')' || c == '(' || c == '"' || c == '\'')
+    if (c == '|' || c == '>' || c == '<' || c == '&' /*|| c == '$'*/ || c == ')' || c == '(' || c == '"' || c == '\'')
         return (1);
     return (0);
 }
@@ -46,4 +46,3 @@ int space_until_next(char   *str)
     }
     return (i);
 }
-

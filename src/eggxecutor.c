@@ -28,7 +28,7 @@ static int	redir_out(command *cmd)
 		else
 			if (access_or_create(cmd->outpath + 1))
 			{
-				cmd->outfd = open(cmd->outpath + 1, O_CREAT | O_WRONLY, 00600);  //todo creare file
+				cmd->outfd = open(cmd->outpath + 1, O_CREAT | O_WRONLY | O_TRUNC, 00600);  //todo creare file
 			}
 			else
 				return (0);
@@ -57,7 +57,6 @@ static int	redir_in(command *cmd)
 	}
 	return (1);
 }
-
 
 
 
@@ -96,6 +95,7 @@ int	execute(t_list **parsed_list, char **env)
 	int		piped[2];
 	pid_t	pid;
 
+	pid = 0;
 	if (!(*parsed_list))
 		return (1);
 	cur = (*parsed_list)->content;
@@ -110,35 +110,31 @@ int	execute(t_list **parsed_list, char **env)
 		next->infd = piped[0];
 		cur->outfd = piped[1];
 	}
-	pid = fork();
-
-	printf("PID == %i\n", pid);
+	if (!is_builtin(cur->cmd))
+		pid = fork();
 	if (!pid)
 	{
 		redir_in(cur); //add guard
 		redir_out(cur); //add guard
 		if (cur->infd != STDIN_FILENO)
 		{
-			printf("entrato in infd\n");
 			dup2(cur->infd, STDIN_FILENO); //add dup2 guard
 			close(prev->outfd);
 		}
 		if (cur->outfd != STDOUT_FILENO)
 		{
-			printf("entrato in outfd\n");
 			dup2(cur->outfd,STDOUT_FILENO); //add dup2 guard
 		}
-		if (is_builtin(cur->cmd))
-			printf("BUILTIN!\n");
 		else
 		{
 			char	*prova = get_path(env, cur->cmd);
-			printf("comando trovato:%s\n", prova);
 			if (prova)
 				cur->argv = listomap(prova, &cur->args);
 			else
 			 	cur->argv = listomap(cur->cmd, &cur->args);
-			if (prova == NULL &&  execve(cur->cmd ,cur->argv, env) == -1)
+			if (is_builtin(cur->cmd))
+				exec_builtin(cur->cmd, cur->argv, env, NULL);
+			else if (prova == NULL &&  execve(cur->cmd ,cur->argv, env) == -1)
 					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
 			else if (execve(prova ,cur->argv, env) == -1)
 					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati

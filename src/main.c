@@ -1,5 +1,4 @@
 #include "../minishell.h"
-#include <curses.h>
 #include <stdio.h>
 
 void    read_input(char **env);
@@ -20,7 +19,6 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-	printf("%s\n", env[1]);
     ft_signals();
     read_input(env);
 }
@@ -93,20 +91,19 @@ void    read_input(char **env)
     while (1)
     {
         str = readline(PROMPT" ");
-        add_history(str);
         if (blank_check(str))
             continue;
-        tlist = tokenize(str, &tlist, env); //add guard
-		printf("exited tokenizer\n");
+        add_history(str);
+        tlist = tokenize(str, &tlist); //add guard
+        print_tokens(tlist);
+        expand(&tlist, env);
         print_tokens(tlist);
         plist = parser(&tlist, &plist);
-		printf("exited parser\n");
+        ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
 			printf("syntax error\n");
         print_parse(plist);
 		execute(&plist, env);
-		printf("exited executor\n");
-        ft_lstclear(&tlist, free_token);
         ft_lstclear(&plist, free_command);
         tlist = NULL;
 		plist = NULL;
