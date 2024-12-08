@@ -3,4 +3,4 @@
 
 2) da gestire la differenza tra dquote e squote e gli escape char. \
 
-3) DOUBLE FREE con comandi non esistenti -> lstclear dei comandi lo fa, da capire dove
+3) si aprono diverse istanze di minishell ;)
