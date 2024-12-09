@@ -9,5 +9,6 @@ int	ft_exit();
 int	pwd();
 int	env(char **env);
 int export(char **argv, char ***env);
-
+int	already_present(char    *str, char    **env);
+int	unset(char **argv, char ***env);
 #endif

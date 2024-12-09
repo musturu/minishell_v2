@@ -1,6 +1,6 @@
 #include    "../../minishell.h"
 
-char    already_present(char    *str, char    **env)
+int	already_present(char    *str, char    **env)
 {
     int i;
     int len;

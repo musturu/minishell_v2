@@ -29,7 +29,7 @@ void    print_parse(t_list *list)
     command     *cmd;
 	t_list	*tmparg;
 
-	printf("______________PARSER_______________\n\n");
+	printf("\n______________PARSER_______________\n");
     while (tmp)
     {
         printf("NEW COMMAND\t");
@@ -48,7 +48,7 @@ void    print_parse(t_list *list)
 			printf("CONNECTOR OUT: %i\n", cmd->outconnect);
         tmp = tmp->next;
     }
-	printf("______________________________________\n\n");
+	printf("\n______________________________________\n");
 }
 
 void    print_tokens(t_list *list)
@@ -56,14 +56,14 @@ void    print_tokens(t_list *list)
     t_list  *tmp = list;
     token   *tkn;
 
-	printf("________________TOKENS_________________\n\n");
+	printf("\n________________TOKENS_________________\n");
     while (tmp)
     {
         tkn = tmp->content;
         printf("TYPE:\t%i\tVALUE:\t[%s]\tprev: [%p] - cur : [%p]\n", tkn->type, tkn->value, tmp->prev, tmp);
         tmp = tmp->next;
     }
-	printf("______________________________________\n\n");
+	printf("\n______________________________________\n");
 }
 
 int blank_check(char *str)
@@ -97,12 +97,12 @@ void    read_input(char **env)
         tlist = tokenize(str, &tlist); //add guard
         print_tokens(tlist);
         expand(&tlist, env);
-        print_tokens(tlist);
+        /*print_tokens(tlist);*/
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
 			printf("syntax error\n");
-        print_parse(plist);
+        /*print_parse(plist);*/
 		execute(&plist, env);
         ft_lstclear(&plist, free_command);
         tlist = NULL;

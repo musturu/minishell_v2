@@ -10,16 +10,16 @@ char	is_builtin(char *cmd)
 	if (!ft_strncmp(cmd, "echo", len))
 		return (1);
 	if (!ft_strncmp(cmd, "cd", len))
-		return (1);
+		return (0);
 	if (!ft_strncmp(cmd, "env", len))
 		return (1);
 	if (!ft_strncmp(cmd, "exit", len))
 		return (1);
 	if (!ft_strncmp(cmd, "pwd", len))
-		return (1);
+		return (0);
 	if (!ft_strncmp(cmd, "export", len))
-		return (1);
-	if (!ft_strncmp(cmd, "echo", len))
+		return (0);
+	if (!ft_strncmp(cmd, "unset", len))
 		return (1);
 	//add others
 	return (0);
@@ -42,10 +42,9 @@ int exec_builtin(char *cmd, char **argv, char **en, int *ret)
 		return pwd();
 	if (!ft_strncmp(cmd, "export", len))
 		return (export(argv, &en));
-	if (!ft_strncmp(cmd, "echo", len))
-		return (1);
+	if (!ft_strncmp(cmd, "unset", len))
+		return (unset(argv, &en));
 	(void)ret;
-	//add otherske
 	return (0);
 
 }
