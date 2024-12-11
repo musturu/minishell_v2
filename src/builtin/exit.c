@@ -1,9 +1,7 @@
-#include <stdlib.h>
+#include "../../minishell.h"
 
-int ft_exit(char **argv, char **env)
+int ft_exit()
 {
-	(void)argv;
-	(void)env;
-	//TODO: free stuff
-	exit(0);
+	status = -1;
+	return (-1);
 }

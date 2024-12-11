@@ -1,51 +1,48 @@
 #include "../minishell.h"
-#include "builtin/builtin.h"
 #include <stdio.h>
 
+//actually tells us if process needs a fork or not
 char	is_builtin(char *cmd)
 {
-	int	len;
-
-	len = ft_strlen(cmd);
-	if (!ft_strncmp(cmd, "echo", len))
-		return (1);
-	if (!ft_strncmp(cmd, "cd", len))
+	if (!ft_strncmp(cmd, "echo", 4))
+	{
 		return (0);
-	if (!ft_strncmp(cmd, "env", len))
+	}
+	if (!ft_strncmp(cmd, "cd", 2))
 		return (1);
-	if (!ft_strncmp(cmd, "exit", len))
-		return (1);
-	if (!ft_strncmp(cmd, "pwd", len))
+	if (!ft_strncmp(cmd, "env", 3))
 		return (0);
-	if (!ft_strncmp(cmd, "export", len))
-		return (0);
-	if (!ft_strncmp(cmd, "unset", len))
+	if (!ft_strncmp(cmd, "exit", 4))
 		return (1);
-	//add others
-	return (0);
+	if (!ft_strncmp(cmd, "pwd", 3))
+		return (1);
+	if (!ft_strncmp(cmd, "export", 6))
+		return (1);
+	if (!ft_strncmp(cmd, "unset", 5))
+		return (0);
+	return (-1);
 }
 
 int exec_builtin(char *cmd, char **argv, char **en, int *ret)
 {
-	int	len;
+	int	r;
 
-	len = ft_strlen(cmd);
-	if (!ft_strncmp(cmd, "echo", len))
-		return echo(argv);
-	if (!ft_strncmp(cmd, "cd", len))
-		return cd(argv);
-	if (!ft_strncmp(cmd, "env", len))
-		return env(en);
-	if (!ft_strncmp(cmd, "exit", len))
-		return ft_exit();
-	if (!ft_strncmp(cmd, "pwd", len))
-		return pwd();
-	if (!ft_strncmp(cmd, "export", len))
-		return (export(argv, &en));
-	if (!ft_strncmp(cmd, "unset", len))
-		return (unset(argv, &en));
-	(void)ret;
-	return (0);
+	if (!ft_strncmp(cmd, "echo", 4))
+		r = echo(argv);
+	if (!ft_strncmp(cmd, "cd", 2))
+		r = cd(argv);
+	if (!ft_strncmp(cmd, "env", 3))
+		r = env(en);
+	if (!ft_strncmp(cmd, "exit", 4))
+		r = ft_exit();
+	if (!ft_strncmp(cmd, "pwd", 3))
+		r = pwd();
+	if (!ft_strncmp(cmd, "export", 5))
+		r = (export(argv, &en));
+	if (!ft_strncmp(cmd, "unset", 5))
+		r = (unset(argv, &en));
+	*ret = r;
+	return r;
 
 }
 

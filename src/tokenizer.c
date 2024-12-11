@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/11/26 17:35:41 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:49:02 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include  "../minishell.h"
 
-static TokenType   get_token_type(char *str)
+static e_TokenType   get_token_type(char *str)
 {
-    printf("AAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHH STR: %s\n", str);
     if (!*str)
         return (TOKEN_EOF);
 /*
@@ -37,13 +36,11 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_REDIR_OUT);
     if (!ft_strncmp(str, "<", 1))
         return (TOKEN_REDIR_IN);
-    // if (!ft_strncmp(str, " ", 1))
-    //     return (TOKEN_SPACE);
     else
         return (TOKEN_WORD);
 }
 
-static char    *get_token_value(char   *str, TokenType type)
+static char    *get_token_value(char   *str, e_TokenType type)
 {
     if (type == TOKEN_EOF)
         return (ft_strdup("EOF"));
@@ -65,14 +62,11 @@ static char    *get_token_value(char   *str, TokenType type)
 
 	static int append_token(char **str, t_list **lst)
 {
-    token   *tok;
+    t_token   *tok;
 
-    tok = ft_calloc(1, sizeof(token));
+    tok = ft_calloc(1, sizeof(t_token));
     if (!tok)
         return (0);
-    printf("-------------------------------------------\n");
-    printf("TOKEN TYPE: %i e STR : %s\n", get_token_type(*str), *str);
-    printf("-------------------------------------------\n");
     tok->type = get_token_type(*str);
     tok->value = get_token_value(*str, tok->type);
     if (!tok->value)

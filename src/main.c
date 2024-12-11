@@ -3,6 +3,8 @@
 
 void    read_input(char **env);
 
+int status;
+
 void ft_zozzle()
 {
     printf("\n"PROMPT" ");
@@ -17,16 +19,18 @@ void    ft_signals()
 
 int main(int argc, char **argv, char **env)
 {
+    status = 0;
 	(void)argc;
 	(void)argv;
     ft_signals();
     read_input(env);
+    return(0);
 }
 
 void    print_parse(t_list *list)
 {
     t_list  *tmp = list;
-    command     *cmd;
+    t_command     *cmd;
 	t_list	*tmparg;
 
 	printf("\n______________PARSER_______________\n");
@@ -54,7 +58,7 @@ void    print_parse(t_list *list)
 void    print_tokens(t_list *list)
 {
     t_list  *tmp = list;
-    token   *tkn;
+    t_token   *tkn;
 
 	printf("\n________________TOKENS_________________\n");
     while (tmp)
@@ -88,24 +92,22 @@ void    read_input(char **env)
 
     tlist = NULL;
 	plist = NULL;
-    while (1)
+    while (status != -1)
     {
         str = readline(PROMPT" ");
         if (blank_check(str))
             continue;
         add_history(str);
         tlist = tokenize(str, &tlist); //add guard
-        print_tokens(tlist);
         expand(&tlist, env);
-        /*print_tokens(tlist);*/
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
 			printf("syntax error\n");
-        /*print_parse(plist);*/
 		execute(&plist, env);
         ft_lstclear(&plist, free_command);
         tlist = NULL;
 		plist = NULL;
+        printf("status :%i\n", status);
     }
 }

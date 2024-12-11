@@ -17,7 +17,7 @@ void	free_matrix(char **mat)
 
 void	free_token(void	*tok)
 {
-	token	*tkn;
+	t_token	*tkn;
 
 	tkn = tok;
 	if (tkn != NULL)
@@ -31,7 +31,7 @@ void	free_token(void	*tok)
 
 void	free_command(void *comd)
 {
-	command	*cmd;
+	t_command	*cmd;
 
 	cmd = comd;
 	if (cmd != NULL)

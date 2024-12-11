@@ -1,7 +1,7 @@
 #include "../minishell.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
+
+void get_path(char **env, t_command **command);
+void	execute_fork(t_command **cur, t_command **prev, char **env);
 
 
 static int	access_or_create(char *path)
@@ -14,7 +14,7 @@ static int	access_or_create(char *path)
 }
 
 
-static int	redir_out(command *cmd)
+static int	redir_out(t_command *cmd)
 {
 	if (cmd->outpath)
 	{
@@ -36,7 +36,7 @@ static int	redir_out(command *cmd)
 	return (1);
 }
 
-static int	redir_in(command *cmd)
+static int	redir_in(t_command *cmd)
 {
 	if (cmd->inpath)
 	{
@@ -58,40 +58,39 @@ static int	redir_in(command *cmd)
 	return (1);
 }
 
-
-
-char	*get_path(char **env, char *command)
+void get_path(char **env, t_command **command)
 {
 	char	**paths;
+	char	*cmd;
 	char	*ret;
 	int		i;
 
+	if (is_builtin((*command)->cmd) >= 0 || !access((*command)->cmd, F_OK))
+		return ;
 	i = 0;
-	command = ft_strjoin("/", command);
+	cmd = ft_strjoin("/", (*command)->cmd);
+	free((*command)->cmd);
 	paths = ft_split(env[str_to_env_index(env, "PATH")], ':');
-	ret	= ft_strjoin(*paths, command);
-	while (paths[i] && access(ret, X_OK) != 0)
+	ret	= ft_strjoin(paths[i], cmd);
+	while (paths[i] && access(ret, F_OK) != 0)
 	{
 		free(ret);
-		ret	= ft_strjoin(paths[i], command);
+		ret	= ft_strjoin(paths[i], cmd);
 		i++;
 	}
-	free(command);
-	if (paths[i])
-	{
-		free_matrix(paths);
-		return (ret);
-	}
-	free(ret);
+	free(cmd);
 	free_matrix(paths);
-	return (NULL);
+	if (access(ret, F_OK) == 0)
+		(*command)->cmd = ret;
+	else
+		(*command)->cmd = NULL;
 }
 
 int	execute(t_list **parsed_list, char **env)
 {
-	command	*cur;
-	command	*next;
-	command	*prev;
+	t_command	*cur;
+	t_command	*next;
+	t_command	*prev;
 	int		piped[2];
 	pid_t	pid;
 
@@ -111,42 +110,38 @@ int	execute(t_list **parsed_list, char **env)
 		cur->outfd = piped[1];
 	}
 	if (!is_builtin(cur->cmd))
-		pid = fork();
-	if (!pid)
 	{
-		redir_in(cur); //add guard
-		redir_out(cur); //add guard
-		if (cur->infd != STDIN_FILENO)
-		{
-			dup2(cur->infd, STDIN_FILENO); //add dup2 guard
-			close(prev->outfd);
-		}
-		if (cur->outfd != STDOUT_FILENO)
-		{
-			dup2(cur->outfd,STDOUT_FILENO); //add dup2 guard
-		}
-		else
-		{
-			char	*prova = get_path(env, cur->cmd);
-			if (prova)
-				cur->argv = listomap(prova, &cur->args);
-			else
-			 	cur->argv = listomap(cur->cmd, &cur->args);
-			if (is_builtin(cur->cmd))
-				exec_builtin(cur->cmd, cur->argv, env, NULL);
-			else if (prova == NULL &&  execve(cur->cmd ,cur->argv, env) == -1)
-					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
-			else if (execve(prova ,cur->argv, env) == -1)
-					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
-		}
-		return 0;
-
+		printf("ho forkato\n");
+		pid = fork();
 	}
+	if (!pid)
+		execute_fork(&cur, &prev, env);
 	if (cur->inconnect == TOKEN_PIPE)
 		close(prev->outfd);
 	execute(&(*parsed_list)->next, env);
 	if (cur->outconnect != TOKEN_AND)
-		waitpid(pid, NULL, 0); //we can use the second parameter to store exit status of process. man waitpid
+		waitpid(pid, &status, 0); //we can use the second parameter to store exit status of process. man waitpid
 	return 1;
 }
 
+void	execute_fork(t_command **cur, t_command **prev, char **env)
+{
+	get_path(env, cur);
+	if (!access((*cur)->cmd, X_OK))
+		printf("ERROR: execution denied cmd:[%s]", (*cur)->cmd);
+	redir_in(*cur); //add guard
+	redir_out(*cur); //add guard
+	if ((*cur)->infd != STDIN_FILENO)
+	{
+		dup2((*cur)->infd, STDIN_FILENO); //add dup2 guard
+		close((*prev)->outfd);
+	}
+	if ((*cur)->outfd != STDOUT_FILENO)
+		dup2((*cur)->outfd,STDOUT_FILENO); //add dup2 guard
+	(*cur)->argv = listomap((*cur)->cmd, &(*cur)->args);
+	if (!is_builtin((*cur)->cmd))
+			exec_builtin((*cur)->cmd, (*cur)->argv, env, &status);
+	else if (execve((*cur)->cmd ,(*cur)->argv, env) == -1)
+			printf("command %s not found\n", (*cur)->cmd);
+	exit(status);
+}

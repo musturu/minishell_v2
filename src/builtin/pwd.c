@@ -11,11 +11,11 @@ int	pwd()
 	size = PATH_MAX;
 	pwd = malloc(size);
 	if (pwd == NULL)
-		return (0);
+		return (1);
 	getcwd(pwd, size);
 	if (pwd == NULL)
-		return (0);
+		return (1);
 	printf("%s\n", pwd);
 	free(pwd);
-	return (1);
+	return(0);
 }

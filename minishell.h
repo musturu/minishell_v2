@@ -1,5 +1,5 @@
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 #include <stdio.h>     // Per printf, perror
 #include <stdlib.h>    // Per malloc, free, exit, getenv
@@ -47,17 +47,16 @@ typedef enum
     TOKEN_DAND,
     TOKEN_PCOMM
     // Aggiungere altri tipi di token necessari
-} TokenType;
+} e_TokenType;
 
 typedef struct s_token
 {
-    TokenType type;
+    e_TokenType type;
     char *value;
-} token;
+} t_token;
 
 typedef struct s_cmd
 {
-
     char *cmd;           // command name / path
     t_list *args;        // list of arguments
     char *inpath;        // file name of INPUT
@@ -65,9 +64,11 @@ typedef struct s_cmd
     char **argv;         // arguments matrix (necessary for execve)
     int infd;            // input fd
     int outfd;           // output fd
-    TokenType inconnect; // 6 possibilities in bash = & | ; && || EOF
-    TokenType outconnect;
-} command;
+    e_TokenType inconnect; // 6 possibilities in bash = & | ; && || EOF
+    e_TokenType outconnect;
+} t_command;
+
+extern int status;
 
 /*TOKENIZER*/
 void go_next(char **str);
@@ -85,16 +86,15 @@ void print_parse(t_list *list);
 
 /*parser*/
 t_list *parser(t_list **tokens, t_list **parsed_list);
-char is_redirection(TokenType type);
+char is_redirection(e_TokenType type);
 char is_break(t_list *tokens);
-char is_string(TokenType type);
+char is_string(e_TokenType type);
 char is_after_break(t_list *tokens);
 
 /*execute*/
 int exec_builtin(char *cmd, char **argv, char **env, int *ret);
 int str_to_env_index(char **env, char *name);
 int execute(t_list **parsed_list, char **env);
-char *get_path(char **env, char *command);
 
 /*memory*/
 void free_command(void *cmd);

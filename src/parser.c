@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 16:52:52 by mamerlin          #+#    #+#             */
-/*   Updated: 2024/08/20 19:07:07 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:26:50 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,19 @@
 
 
 /*
- * the parser functions in the same exact way the tokenizer does, by calling itself it attaches
- * at the end of the list a new node, consuming the utilized token nodes in the process.
- *
+ * the parser functions in the same way the tokenizer does, by calling
+ * itself it attaches
+ * at the end of the list a new node,
+ * consuming the utilized token nodes in the process.
  */
-
-
 
 static char	*get_command_command(t_list **tokens)
 {
-	token	*tkn;
+	t_token	*tkn;
 	char	*ret;
 
 	tkn = (*tokens)->content;
-	if (is_after_break(*tokens) && (is_string(tkn->type)))  
+	if (is_after_break(*tokens) && (is_string(tkn->type)))
 	{
 		ret = ft_strdup(tkn->value);
 		ft_lst_remove_node(tokens, *tokens, free_token);
@@ -43,7 +42,7 @@ static char	*get_command_command(t_list **tokens)
 static t_list	*get_command_args(t_list **tokens)
 {
 	t_list	*ret;
-	token	*tknnext;
+	t_token	*tknnext;
 
 	ret = NULL;
 	tknnext = (*tokens)->content;
@@ -64,12 +63,12 @@ static char	*get_command_in(t_list **tokens)
 	lst = *tokens;
 	while (lst && !is_break(lst))
 	{
-		if ((((token *)(lst->content))->type == TOKEN_REDIR_IN || ((token *)(lst->content))->type == TOKEN_REDIR_PRE) && lst->next)
+		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_IN || ((t_token *)(lst->content))->type == TOKEN_REDIR_PRE) && lst->next)
 		{
 			lst = lst->next;
-			if (is_string(((token *)(lst->content))->type))
+			if (is_string(((t_token *)(lst->content))->type))
 			{
-				ret = ft_strjoin(((token *)(lst->prev->content))->value, ((token *)(lst->content))->value);
+				ret = ft_strjoin(((t_token *)(lst->prev->content))->value, ((t_token *)(lst->content))->value);
 				ft_lst_remove_node(tokens, lst->prev, free_token);
 				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
@@ -90,12 +89,12 @@ static char	*get_command_out(t_list **tokens)
 	lst = *tokens;
 	while (lst && !is_break(lst))
 	{
-		if ((((token *)(lst->content))->type == TOKEN_REDIR_OUT || ((token *)(lst->content))->type == TOKEN_REDIR_APPEND) && (*tokens)->next)
+		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_OUT || ((t_token *)(lst->content))->type == TOKEN_REDIR_APPEND) && (*tokens)->next)
 		{
 			lst = lst->next;
-			if (is_string(((token *)(lst->content))->type))
+			if (is_string(((t_token *)(lst->content))->type))
 			{
-				ret = ft_strjoin(((token *)(lst->prev->content))->value, ((token *)(lst->content))->value);
+				ret = ft_strjoin(((t_token *)(lst->prev->content))->value, ((t_token *)(lst->content))->value);
 				ft_lst_remove_node(tokens, lst->prev, free_token);
 				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
@@ -108,9 +107,9 @@ static char	*get_command_out(t_list **tokens)
 	return (NULL);
 }
 //dovremmo mettere anche || e && ? bho
-static TokenType get_command_inconnect(t_list **tokens, int isfirst)
+static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 {
-	token	*tkn;
+	t_token	*tkn;
 
 	tkn = (*tokens)->content;
 	if (!(*tokens)->prev && isfirst)
@@ -130,9 +129,9 @@ static TokenType get_command_inconnect(t_list **tokens, int isfirst)
 }
 
 //dovremmo mettere anche ||, && e ;? bho
-static TokenType get_command_outconnect(t_list **tokens)
+static e_TokenType get_command_outconnect(t_list **tokens)
 {
-	token	*tkn;
+	t_token	*tkn;
 
 	tkn = (*tokens)->content;
 	if (tkn->type == TOKEN_AND)
@@ -152,9 +151,9 @@ static TokenType get_command_outconnect(t_list **tokens)
 
 static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 {
-	command	*cmd;
+	t_command	*cmd;
 
-	cmd = ft_calloc(1, sizeof(command));
+	cmd = ft_calloc(1, sizeof(t_command));
 	if (!cmd)
 		return (0);
 	cmd->inconnect = get_command_inconnect(tokens, (*parsed_list) == NULL);
@@ -175,9 +174,9 @@ static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 	return (1);
 }
 
-t_list	*parser(t_list **tokens,t_list **parsed_list)
+t_list	*parser(t_list **tokens, t_list **parsed_list)
 {
-	if (!*tokens || ((token *)(*tokens)->content)->type == TOKEN_EOF)
+	if (!*tokens || ((t_token *)(*tokens)->content)->type == TOKEN_EOF)
 		return (*parsed_list);
 	if (!append_cmd(tokens, parsed_list))
 	{
@@ -187,4 +186,3 @@ t_list	*parser(t_list **tokens,t_list **parsed_list)
 	}
 	return (parser(tokens, parsed_list));
 }
-

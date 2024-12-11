@@ -1,5 +1,5 @@
 
-
+#include <stdlib.h>
 #include <stdio.h>
 
 int env(char **env)
@@ -9,5 +9,5 @@ int env(char **env)
 	i = 0;
 	while(env[i])
 		printf("%s\n", env[i++]);
-	return (1);
+	return (0);
 }

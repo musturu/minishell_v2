@@ -88,7 +88,7 @@ char *expand_multiple_env(char *input, char **env)
     return (result);
 }
 
-static void handle_token_expansion(token *tkn, char **env)
+static void handle_token_expansion(t_token *tkn, char **env)
 {
     int env_index;
 
@@ -108,9 +108,8 @@ static void handle_token_expansion(token *tkn, char **env)
 t_list *expand(t_list **list, char **env)
 {
     t_list *tmp;
-    token *tkn;
+    t_token *tkn;
 
-    printf("EXPANDER\n");
     tmp = *list;
     while (tmp)
     {
