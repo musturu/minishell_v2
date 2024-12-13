@@ -28,7 +28,7 @@ static int	redir_out(t_command *cmd)
 		else
 			if (access_or_create(cmd->outpath + 1))
 			{
-				cmd->outfd = open(cmd->outpath + 1, O_CREAT | O_WRONLY | O_TRUNC, 00600);  //todo creare file
+				cmd->outfd = open(cmd->outpath + 1, O_CREAT | O_WRONLY | O_TRUNC, 00600);
 			}
 			else
 				return (0);
@@ -40,12 +40,10 @@ static int	redir_in(t_command *cmd)
 {
 	if (cmd->inpath)
 	{
-		if (cmd->inpath[1] == '<') //da implementare <<
+		if (cmd->inpath[1] == '<')
 		{
-		if (access(cmd->inpath + 2, R_OK) == 0)
-				cmd->infd = open(cmd->outpath + 2, O_RDONLY);
-		else
-			return (0);
+			if (!heredoc(cmd, NULL))
+				return (0);
 		}
 		else
 		{
@@ -126,8 +124,9 @@ int	execute(t_list **parsed_list, char **env)
 
 void	execute_fork(t_command **cur, t_command **prev, char **env)
 {
+	(void)prev;
 	get_path(env, cur);
-	if (!access((*cur)->cmd, X_OK))
+	if (access((*cur)->cmd, X_OK) == 0)
 		printf("ERROR: execution denied cmd:[%s]", (*cur)->cmd);
 	redir_in(*cur); //add guard
 	redir_out(*cur); //add guard

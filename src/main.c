@@ -5,18 +5,6 @@ void    read_input(char **env);
 
 int status;
 
-void ft_zozzle()
-{
-    printf("\n"PROMPT" ");
-}
-
-void    ft_signals()
-{
-
-    signal(SIGINT, ft_zozzle);
-    signal(SIGKILL, ft_zozzle);
-}
-
 int main(int argc, char **argv, char **env)
 {
     status = 0;

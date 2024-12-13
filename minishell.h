@@ -95,6 +95,7 @@ char is_after_break(t_list *tokens);
 int exec_builtin(char *cmd, char **argv, char **env, int *ret);
 int str_to_env_index(char **env, char *name);
 int execute(t_list **parsed_list, char **env);
+int	heredoc(t_command *command, char **env);
 
 /*memory*/
 void free_command(void *cmd);
@@ -110,5 +111,9 @@ char is_builtin(char *cmd);
 void ft_lst_remove_node(t_list **lst, t_list *node, void (*del)(void *));
 int ft_isspace(char c);
 int ft_contains_dollar(const char *str);
+
+/*signals*/
+void	ft_signals(void);
+void	handlec_heredoc(int sig);
 
 #endif
