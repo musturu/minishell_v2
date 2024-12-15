@@ -16,7 +16,7 @@ int	already_present(char    *str, char    **env)
         if (!ft_strncmp(str , env[i], len - 1))
             return (i);
     }
-    return (0);
+    return (-1);
 }
 
 void    matrixdup(char  ***dst, char ***src)

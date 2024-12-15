@@ -75,3 +75,16 @@ int	ft_contains_dollar(const char *str)
     }
     return (0);
 }
+char    **ft_matdup(char **mat)
+{
+    int i;
+    char    **ret;
+
+    i = 0;
+    while (mat[i])
+        i++;
+    ret = ft_calloc(i + 1, sizeof(char *));
+    while (--i >= 0)
+        ret[i] = ft_strdup(mat[i]);
+    return (ret);
+}

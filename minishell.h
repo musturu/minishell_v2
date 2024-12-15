@@ -24,6 +24,7 @@
 // Definizioni di prototipi di funzione, se necessario
 // ...
 #define PROMPT "MINISHELL$>"
+#define NEEDFORK(arg) is_builtin(arg) != 1
 
 typedef enum
 {
@@ -92,9 +93,9 @@ char is_string(e_TokenType type);
 char is_after_break(t_list *tokens);
 
 /*execute*/
-int exec_builtin(char *cmd, char **argv, char **env, int *ret);
+int exec_builtin(char *cmd, char **argv, char ***env, int *ret);
 int str_to_env_index(char **env, char *name);
-int execute(t_list **parsed_list, char **env);
+int execute(t_list **parsed_list, char ***env);
 int	heredoc(t_command *command, char **env);
 
 /*memory*/
@@ -103,8 +104,9 @@ void free_token(void *tkn);
 void free_matrix(char **mat);
 
 /*utils*/
+char    **ft_matdup(char **mat);
 char	*get_env(char **env, char *name);
-char **listomap(char *cmd, t_list **list);
+char **listomap(char *cmd, t_list *list);
 int str_to_env_index(char **env, char *name);
 int ft_istokenchar(char c);
 char is_builtin(char *cmd);

@@ -6,15 +6,15 @@ static void	readdoc(t_command *command, char **env, int fd)
 {
 	char	*line;
 	int		i;
-	
+
 	(void)env;
 	i = 0;
 	while (++i)
 	{
 		if (i % 2 == 1)
-			line = readline("\n(.)       ");
+			line = readline("(.)       ");
 		else
-		 	line = readline("\n--------D ");
+		 	line = readline("--------D ");
 		if (!line)
 			break ;
 		if (!ft_strncmp(line, command->inpath + 2, ft_strlen(command->inpath + 2)))
@@ -39,7 +39,7 @@ int	heredoc(t_command *command, char **env)
 	pid = fork();
 	if (pid == 0)
 	{
-		/*signal(SIGINT, handle_sigint_heredoc);*/
+		signal(SIGINT, handlec_heredoc);
 		close(fds[0]);
 		readdoc(command, env, fds[1]);
 		close(fds[1]);

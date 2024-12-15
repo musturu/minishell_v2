@@ -7,11 +7,13 @@ int status;
 
 int main(int argc, char **argv, char **env)
 {
-    status = 0;
 	(void)argc;
 	(void)argv;
+    status = 0;
+    env = ft_matdup(env);
     ft_signals();
     read_input(env);
+    free_matrix(env);
     return(0);
 }
 
@@ -83,19 +85,21 @@ void    read_input(char **env)
     while (status != -1)
     {
         str = readline(PROMPT" ");
+        if (!str)
+            return ;
         if (blank_check(str))
             continue;
         add_history(str);
         tlist = tokenize(str, &tlist); //add guard
+        free(str);
         expand(&tlist, env);
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
 			printf("syntax error\n");
-		execute(&plist, env);
+		execute(&plist, &env);
         ft_lstclear(&plist, free_command);
         tlist = NULL;
 		plist = NULL;
-        printf("status :%i\n", status);
     }
 }

@@ -46,7 +46,10 @@ void	free_command(void *comd)
 			free(cmd->outpath);
 		cmd->outpath = NULL;
 		if (cmd->args)
+		{
 			ft_lstclear(&cmd->args, free);
+		}
+		free(cmd->args);
 		cmd->args = NULL;
 		if (cmd->argv)
 			free_matrix(cmd->argv);
