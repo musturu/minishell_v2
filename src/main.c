@@ -1,5 +1,6 @@
 #include "../minishell.h"
 #include <stdio.h>
+#include <unistd.h>
 
 void    read_input(char **env);
 
@@ -72,6 +73,23 @@ int blank_check(char *str)
         i++;
     }
     return (1);
+}
+
+void	close_fds(t_list *lst)
+{
+	t_list	*cmd;
+	t_command	command;
+
+	cmd = lst;
+	while (cmd)
+	{
+		command = *(t_command *)cmd->content;
+		if (command.infd != STDIN_FILENO)
+			close(command.infd);
+		if (command.outfd != STDOUT_FILENO)
+			close(command.outfd);
+		cmd = cmd->next;
+	}
 }
 
 void    read_input(char **env)

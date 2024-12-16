@@ -1,4 +1,6 @@
 #include "../minishell.h"
+#include <stdio.h>
+#include <unistd.h>
 
 void get_path(char **env, t_command **command);
 void	execute_fork(t_command **cur, t_command **prev, char ***env);
@@ -80,7 +82,9 @@ void get_path(char **env, t_command **command)
 	{
 		free((*command)->cmd);
 		(*command)->cmd = ret;
+		return ;
 	}
+	free(ret);
 }
 
 int	execute(t_list **parsed_list, char ***env)
@@ -109,12 +113,20 @@ int	execute(t_list **parsed_list, char ***env)
 	if (NEEDFORK(cur->cmd))
 		pid = fork();
 	if (!pid)
+	{
+		if (cur->outconnect == TOKEN_PIPE)
+			close(piped[0]);
 		execute_fork(&cur, &prev, env);
-	if (cur->inconnect == TOKEN_PIPE)
-		close(prev->outfd);
+	}
+	if (cur->outconnect == TOKEN_PIPE)
+		close(piped[1]);
+	if (cur->outfd != STDOUT_FILENO)
+		close(cur->outfd);
+	if (cur->infd != STDIN_FILENO)
+		close(cur->infd);
 	execute(&(*parsed_list)->next, env);
 	if (cur->outconnect != TOKEN_AND)
-		waitpid(pid, &status, 0); //we can use the second parameter to store exit status of process. man waitpid
+		waitpid(pid, &status, 0);
 	return 1;
 }
 
@@ -129,7 +141,7 @@ void	execute_fork(t_command **cur, t_command **prev, char ***env)
 	if ((*cur)->infd != STDIN_FILENO)
 	{
 		dup2((*cur)->infd, STDIN_FILENO); //add dup2 guard
-		close((*prev)->outfd);
+		/*close((*prev)->outfd);*/
 	}
 	if ((*cur)->outfd != STDOUT_FILENO)
 		dup2((*cur)->outfd,STDOUT_FILENO); //add dup2 guard
