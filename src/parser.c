@@ -109,6 +109,7 @@ static char	*get_command_out(t_list **tokens)
 	}
 	return (NULL);
 }
+
 //dovremmo mettere anche || e && ? bho
 static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 {
@@ -125,7 +126,6 @@ static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 	if (tkn->type == TOKEN_PIPE)
 	{
 		ft_lst_remove_node(tokens, *tokens, free_token);
-		print_tokens(*tokens);
 		return (TOKEN_PIPE);
 	}
 	return 0;
