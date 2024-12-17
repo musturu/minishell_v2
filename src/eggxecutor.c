@@ -141,10 +141,7 @@ void	execute_fork(t_command **cur, t_command **prev, char ***env)
 	if ((*cur)->outfd != STDOUT_FILENO)
 		dup2((*cur)->outfd, STDOUT_FILENO); //add dup2 guard
 	if (!(*cur)->cmd)
-	{
-		printf("eaa%p\n", (*cur)->cmd);
 		exit(0);
-	}
 	(*cur)->argv = listomap((*cur)->cmd, (*cur)->args);
 	if (is_builtin((*cur)->cmd) != -1)
 			exec_builtin((*cur)->cmd, (*cur)->argv, env, &status);
