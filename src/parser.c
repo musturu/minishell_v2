@@ -35,7 +35,7 @@ static char	*get_command_command(t_list **tokens)
 		return (ret);
 	}
 	else
-		return (ft_strdup("ERROR"));
+		return (NULL);
 }
 
 /*
@@ -167,9 +167,8 @@ static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 	if (cmd->outpath && *cmd->outpath == *"ERROR")
 		return (0);
 	cmd->cmd = get_command_command(tokens);
-	if (cmd->cmd && *cmd->cmd == *"ERROR") //potrebbe rompersi se esistesse un comando chiamato ERROR ........
-		return (0);
-	cmd->args = get_command_args(tokens);
+	if (cmd->cmd)
+		cmd->args = get_command_args(tokens);
 	cmd->outconnect = get_command_outconnect(tokens);
 	cmd->outfd = STDOUT_FILENO;
 	cmd->infd = STDIN_FILENO;

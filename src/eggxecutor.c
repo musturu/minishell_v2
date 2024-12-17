@@ -64,7 +64,7 @@ void get_path(char **env, t_command **command)
 	char	*ret;
 	int		i;
 
-	if (is_builtin((*command)->cmd) >= 0 || !access((*command)->cmd, F_OK))
+	if (is_builtin((*command)->cmd) >= 0 || !access((*command)->cmd, F_OK) || !(*command)->cmd)
 		return ;
 	i = 0;
 	cmd = ft_strjoin("/", (*command)->cmd);
@@ -134,17 +134,17 @@ void	execute_fork(t_command **cur, t_command **prev, char ***env)
 {
 	(void)prev;
 	get_path(*env, cur);
-	if (access((*cur)->cmd, X_OK) == 0)
-		printf("ERROR: execution denied cmd:[%s]", (*cur)->cmd);
 	redir_in(*cur); //add guard
 	redir_out(*cur); //add guard
 	if ((*cur)->infd != STDIN_FILENO)
-	{
 		dup2((*cur)->infd, STDIN_FILENO); //add dup2 guard
-		/*close((*prev)->outfd);*/
-	}
 	if ((*cur)->outfd != STDOUT_FILENO)
-		dup2((*cur)->outfd,STDOUT_FILENO); //add dup2 guard
+		dup2((*cur)->outfd, STDOUT_FILENO); //add dup2 guard
+	if (!(*cur)->cmd)
+	{
+		printf("eaa%p\n", (*cur)->cmd);
+		exit(0);
+	}
 	(*cur)->argv = listomap((*cur)->cmd, (*cur)->args);
 	if (is_builtin((*cur)->cmd) != -1)
 			exec_builtin((*cur)->cmd, (*cur)->argv, env, &status);

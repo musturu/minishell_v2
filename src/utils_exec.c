@@ -4,6 +4,8 @@
 //actually tells us if process needs a fork or not
 char	is_builtin(char *cmd)
 {
+	if (!cmd)
+		return (-1);
 	if (!ft_strncmp(cmd, "echo", 4))
 		return (0);
 	if (!ft_strncmp(cmd, "cd", 2))

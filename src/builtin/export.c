@@ -32,10 +32,10 @@ void    matrixdup(char  ***dst, char ***src)
     while ((*src)[i])
     {
         (*dst)[i] = ft_strdup((*src)[i]);
-        //free(*src[i]); DECOMMENTARE QUANDO COPIO ENV ALLINIZIO DEL PROGRAMMA
+        free(*src[i]);
         i++;
     }
-    //free(*src);
+    free(*src);
     src = dst;
 }
 
