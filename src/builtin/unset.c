@@ -1,14 +1,15 @@
 #include "builtin.h"
 #include <stdlib.h>
+#include <stdio.h>
 
-static void	sort_env(char ***env, int index)
+static void	sort_env(char ***en, int index)
 {
-	while ((*env)[index + 1])
+	while ((*en)[index + 1])
 	{
-		(*env)[index] = (*env)[index + 1];
+		(*en)[index] = (*en)[index + 1];
 		index++;
 	}
-	(*env)[index] = NULL;
+	(*en)[index] = NULL;
 }
 
 
@@ -17,13 +18,14 @@ int	unset(char **argv, char ***env)
 	int		i;
 	int	present;
 
-	i = 0;
+	i = 1;
 	while (argv[i])
 	{
 		present = already_present(argv[i], *env);
-		if (present > 0)
+		if (present >= 0)
 		{
 			free((*env)[present]);
+			printf("wa\n/n");
 			(*env)[present] = NULL;
 			sort_env(env, present);
 		}

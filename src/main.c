@@ -1,29 +1,20 @@
 #include "../minishell.h"
 #include <stdio.h>
+#include <unistd.h>
 
 void    read_input(char **env);
 
 int status;
 
-void ft_zozzle()
-{
-    printf("\n"PROMPT" ");
-}
-
-void    ft_signals()
-{
-
-    signal(SIGINT, ft_zozzle);
-    signal(SIGKILL, ft_zozzle);
-}
-
 int main(int argc, char **argv, char **env)
 {
-    status = 0;
 	(void)argc;
 	(void)argv;
+    status = 0;
+    env = ft_matdup(env);
     ft_signals();
     read_input(env);
+    free_matrix(env);
     return(0);
 }
 
@@ -84,6 +75,23 @@ int blank_check(char *str)
     return (1);
 }
 
+void	close_fds(t_list *lst)
+{
+	t_list	*cmd;
+	t_command	command;
+
+	cmd = lst;
+	while (cmd)
+	{
+		command = *(t_command *)cmd->content;
+		if (command.infd != STDIN_FILENO)
+			close(command.infd);
+		if (command.outfd != STDOUT_FILENO)
+			close(command.outfd);
+		cmd = cmd->next;
+	}
+}
+
 void    read_input(char **env)
 {
     char *str;
@@ -95,19 +103,21 @@ void    read_input(char **env)
     while (status != -1)
     {
         str = readline(PROMPT" ");
+        if (!str)
+            return ;
         if (blank_check(str))
             continue;
         add_history(str);
         tlist = tokenize(str, &tlist); //add guard
+        free(str);
         expand(&tlist, env);
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
 			printf("syntax error\n");
-		execute(&plist, env);
+		execute(&plist, &env);
         ft_lstclear(&plist, free_command);
         tlist = NULL;
 		plist = NULL;
-        printf("status :%i\n", status);
     }
 }

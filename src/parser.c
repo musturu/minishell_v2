@@ -6,7 +6,7 @@
 /*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 16:52:52 by mamerlin          #+#    #+#             */
-/*   Updated: 2024/12/11 19:26:50 by lmoricon         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:24:31 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static char	*get_command_command(t_list **tokens)
 		return (ft_strdup("ERROR"));
 }
 
-
+/*
+*	cycles trough the list tokens by destroying the current element,
+*	 using lst_remove_node
+*/
 static t_list	*get_command_args(t_list **tokens)
 {
 	t_list	*ret;
@@ -106,6 +109,7 @@ static char	*get_command_out(t_list **tokens)
 	}
 	return (NULL);
 }
+
 //dovremmo mettere anche || e && ? bho
 static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 {
@@ -122,7 +126,6 @@ static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 	if (tkn->type == TOKEN_PIPE)
 	{
 		ft_lst_remove_node(tokens, *tokens, free_token);
-		print_tokens(*tokens);
 		return (TOKEN_PIPE);
 	}
 	return 0;

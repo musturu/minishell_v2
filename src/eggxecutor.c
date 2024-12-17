@@ -1,7 +1,9 @@
 #include "../minishell.h"
+#include <stdio.h>
+#include <unistd.h>
 
 void get_path(char **env, t_command **command);
-void	execute_fork(t_command **cur, t_command **prev, char **env);
+void	execute_fork(t_command **cur, t_command **prev, char ***env);
 
 
 static int	access_or_create(char *path)
@@ -12,7 +14,6 @@ static int	access_or_create(char *path)
 		return (-1);
 	return (0);
 }
-
 
 static int	redir_out(t_command *cmd)
 {
@@ -28,7 +29,7 @@ static int	redir_out(t_command *cmd)
 		else
 			if (access_or_create(cmd->outpath + 1))
 			{
-				cmd->outfd = open(cmd->outpath + 1, O_CREAT | O_WRONLY | O_TRUNC, 00600);  //todo creare file
+				cmd->outfd = open(cmd->outpath + 1, O_CREAT | O_WRONLY | O_TRUNC, 00600);
 			}
 			else
 				return (0);
@@ -40,12 +41,10 @@ static int	redir_in(t_command *cmd)
 {
 	if (cmd->inpath)
 	{
-		if (cmd->inpath[1] == '<') //da implementare <<
+		if (cmd->inpath[1] == '<')
 		{
-		if (access(cmd->inpath + 2, R_OK) == 0)
-				cmd->infd = open(cmd->outpath + 2, O_RDONLY);
-		else
-			return (0);
+			if (!heredoc(cmd, NULL))
+				return (0);
 		}
 		else
 		{
@@ -69,7 +68,6 @@ void get_path(char **env, t_command **command)
 		return ;
 	i = 0;
 	cmd = ft_strjoin("/", (*command)->cmd);
-	free((*command)->cmd);
 	paths = ft_split(env[str_to_env_index(env, "PATH")], ':');
 	ret	= ft_strjoin(paths[i], cmd);
 	while (paths[i] && access(ret, F_OK) != 0)
@@ -81,12 +79,15 @@ void get_path(char **env, t_command **command)
 	free(cmd);
 	free_matrix(paths);
 	if (access(ret, F_OK) == 0)
+	{
+		free((*command)->cmd);
 		(*command)->cmd = ret;
-	else
-		(*command)->cmd = NULL;
+		return ;
+	}
+	free(ret);
 }
 
-int	execute(t_list **parsed_list, char **env)
+int	execute(t_list **parsed_list, char ***env)
 {
 	t_command	*cur;
 	t_command	*next;
@@ -109,39 +110,46 @@ int	execute(t_list **parsed_list, char **env)
 		next->infd = piped[0];
 		cur->outfd = piped[1];
 	}
-	if (!is_builtin(cur->cmd))
-	{
-		printf("ho forkato\n");
+	if (NEEDFORK(cur->cmd))
 		pid = fork();
-	}
 	if (!pid)
+	{
+		if (cur->outconnect == TOKEN_PIPE)
+			close(piped[0]);
 		execute_fork(&cur, &prev, env);
-	if (cur->inconnect == TOKEN_PIPE)
-		close(prev->outfd);
+	}
+	if (cur->outconnect == TOKEN_PIPE)
+		close(piped[1]);
+	if (cur->outfd != STDOUT_FILENO)
+		close(cur->outfd);
+	if (cur->infd != STDIN_FILENO)
+		close(cur->infd);
 	execute(&(*parsed_list)->next, env);
 	if (cur->outconnect != TOKEN_AND)
-		waitpid(pid, &status, 0); //we can use the second parameter to store exit status of process. man waitpid
+		waitpid(pid, &status, 0);
 	return 1;
 }
 
-void	execute_fork(t_command **cur, t_command **prev, char **env)
+void	execute_fork(t_command **cur, t_command **prev, char ***env)
 {
-	get_path(env, cur);
-	if (!access((*cur)->cmd, X_OK))
+	(void)prev;
+	get_path(*env, cur);
+	if (access((*cur)->cmd, X_OK) == 0)
 		printf("ERROR: execution denied cmd:[%s]", (*cur)->cmd);
 	redir_in(*cur); //add guard
 	redir_out(*cur); //add guard
 	if ((*cur)->infd != STDIN_FILENO)
 	{
 		dup2((*cur)->infd, STDIN_FILENO); //add dup2 guard
-		close((*prev)->outfd);
+		/*close((*prev)->outfd);*/
 	}
 	if ((*cur)->outfd != STDOUT_FILENO)
 		dup2((*cur)->outfd,STDOUT_FILENO); //add dup2 guard
-	(*cur)->argv = listomap((*cur)->cmd, &(*cur)->args);
-	if (!is_builtin((*cur)->cmd))
+	(*cur)->argv = listomap((*cur)->cmd, (*cur)->args);
+	if (is_builtin((*cur)->cmd) != -1)
 			exec_builtin((*cur)->cmd, (*cur)->argv, env, &status);
-	else if (execve((*cur)->cmd ,(*cur)->argv, env) == -1)
+	else if (execve((*cur)->cmd ,(*cur)->argv, *env) == -1)
 			printf("command %s not found\n", (*cur)->cmd);
-	exit(status);
+	if (NEEDFORK((*cur)->cmd))
+	 	exit(status);
 }
