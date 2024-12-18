@@ -66,6 +66,8 @@ t_list	*quote_expand(t_list **list, char **env)
 	while (tmp)
 	{
 		tkn = tmp->content;
+		if (tkn->type != TOKEN_DBQUOTE)
+			return (*list);
 		if (tkn->type == TOKEN_DBQUOTE || strchr(tkn->value, '$'))
 		{
 			handle_token_expansion(tkn, env);
