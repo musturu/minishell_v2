@@ -127,7 +127,7 @@ int	execute(t_list **parsed_list, char ***env)
 	execute(&(*parsed_list)->next, env);
 	if (cur->outconnect != TOKEN_AND)
 		waitpid(pid, &status, 0);
-	return 1;
+	return (1);
 }
 
 void	execute_fork(t_command **cur, t_command **prev, char ***env)
@@ -148,5 +148,5 @@ void	execute_fork(t_command **cur, t_command **prev, char ***env)
 	else if (execve((*cur)->cmd ,(*cur)->argv, *env) == -1)
 			printf("command %s not found\n", (*cur)->cmd);
 	if (NEEDFORK((*cur)->cmd))
-	 	exit(status);
+		exit(status);
 }

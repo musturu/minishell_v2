@@ -80,6 +80,11 @@ char *dquote_manager(char *str);
 
 /*EXPANDER*/
 t_list *expand(t_list **list, char **env);
+t_list *quote_expand(t_list **list, char **env);
+char *allocate_empty_string(void);
+char *process_expansion(char *result, char **next_part, char *start, char **env);
+char *append_to_result(char *result, const char *text, size_t length);
+char *expand_multiple_env(char *input, char **env);
 
 /*debug*/
 void print_tokens(t_list *list);

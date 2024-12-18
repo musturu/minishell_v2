@@ -109,8 +109,15 @@ void    read_input(char **env)
             continue;
         add_history(str);
         tlist = tokenize(str, &tlist); //add guard
+		printf("EXIT TOKENS\n");
+		print_tokens(tlist);
         free(str);
         expand(&tlist, env);
+		printf("EXIT EXPAND\n");
+		print_tokens(tlist);
+		quote_expand(&tlist, env);
+		printf("EXIT EXPAND QUOTE\n");
+		print_tokens(tlist);
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
