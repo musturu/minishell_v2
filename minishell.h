@@ -74,9 +74,11 @@ extern int status;
 /*TOKENIZER*/
 void go_next(char **str);
 int space_until_next(char *str);
-t_list *tokenize(char *str, t_list **list);
+t_list *tokenize(char *str, t_list **list, char **env);
 char *squote_manager(char *str);
-char *dquote_manager(char *str);
+char *dquote_manager(char *str, char **env);
+char	*handle_quoted_expansion(char *quoted_str, char **env);
+char	*word_manager(char *str, char **env);
 
 /*EXPANDER*/
 t_list *expand(t_list **list, char **env);

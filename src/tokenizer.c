@@ -16,10 +16,6 @@ static e_TokenType	get_token_type(char *str)
 {
 	if (!*str)
 		return (TOKEN_EOF);
-	/*
-	if (ft_contains_dollar(str))
-		return (TOKEN_DOLLAR);
-	*/
 	if (!ft_strncmp(str, "$", 1))
 		return (TOKEN_DOLLAR);
 	if (!ft_strncmp(str, "\"", 1))
@@ -40,7 +36,7 @@ static e_TokenType	get_token_type(char *str)
 		return (TOKEN_WORD);
 }
 
-static char	*get_token_value(char *str, e_TokenType type)
+static char	*get_token_value(char *str, e_TokenType type, char **env)
 {
 	if (type == TOKEN_EOF)
 		return (ft_strdup("EOF"));
@@ -53,16 +49,16 @@ static char	*get_token_value(char *str, e_TokenType type)
 	else if (type != TOKEN_WORD && type != TOKEN_DBQUOTE && type != TOKEN_SQUOTE)
 		return (ft_substr(str, 0, 2));
 	else if (type == TOKEN_WORD)
-		return (ft_substr(str, 0, space_until_next(str)));
+		return (word_manager(str, env));
 	else if (type == TOKEN_SQUOTE)
 		return (squote_manager(str));
 	else if (type == TOKEN_DBQUOTE)
-		return (dquote_manager(str));
+		return (dquote_manager(str, env));
 	else
 		return (NULL);
 }
 
-static int	append_token(char **str, t_list **lst)
+static int	append_token(char **str, t_list **lst, char **env)
 {
 	t_token	*tok;
 
@@ -70,7 +66,8 @@ static int	append_token(char **str, t_list **lst)
 	if (!tok)
 		return (0);
 	tok->type = get_token_type(*str);
-	tok->value = get_token_value(*str, tok->type);
+	printf("str: \"%s\"\n", *str);
+	tok->value = get_token_value(*str, tok->type, env);
 	if (!tok->value)
 		return (0);
 	*str += ft_strlen(tok->value);
@@ -80,16 +77,34 @@ static int	append_token(char **str, t_list **lst)
 	return (1);
 }
 
-t_list	*tokenize(char *str, t_list **list)
+int word_space(char *str)
+{
+	int	i;
+
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isspace(str[i]) || ft_istokenchar(str[i]))
+			break ;
+		i++;
+	}
+	while (str[i] && str[i] != '"')
+		i++;
+
+	return (i);
+}
+
+t_list	*tokenize(char *str, t_list **list, char **env)
 {
 	go_next(&str);
 	if (!*str)
 	{
-		if (!append_token(&str, list))
+		if (!append_token(&str, list, env))
 			return (NULL);
 		return (*list);
 	}
-	if (!append_token(&str, list))
+	if (!append_token(&str, list, env))
 		return (NULL);
-	return (tokenize(str, list));
+	return (tokenize(str, list, env));
 }

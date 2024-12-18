@@ -108,7 +108,7 @@ void    read_input(char **env)
         if (blank_check(str))
             continue;
         add_history(str);
-        tlist = tokenize(str, &tlist); //add guard
+        tlist = tokenize(str, &tlist, env); //add guard
 		printf("EXIT TOKENS\n");
 		print_tokens(tlist);
         free(str);

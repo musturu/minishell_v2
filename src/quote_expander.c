@@ -13,7 +13,7 @@
 #include "../minishell.h"
 #include <stdbool.h>
 
-static char	*handle_quoted_expansion(char *quoted_str, char **env)
+char	*handle_quoted_expansion(char *quoted_str, char **env)
 {
 	char	*result;
 	char	*next_part;
@@ -45,7 +45,10 @@ static void	handle_token_expansion(t_token *tkn, char **env)
 	if (tkn->type == TOKEN_DBQUOTE)
 		tkn->value = handle_quoted_expansion(tkn->value, env);
 	else if (strchr(tkn->value, '$'))
+	{
+		printf("value: %s\n", tkn->value);
 		tkn->value = expand_multiple_env(tkn->value, env);
+	}
 	else if (ft_strlen(tkn->value) == 1)
 		tkn->value = ft_strdup("$");
 	else
