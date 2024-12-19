@@ -65,3 +65,18 @@ char **listomap(char *cmd, t_list *list)
 	mat[i] = NULL;
 	return (mat);
 }
+
+int	pipes(t_list **lst)
+{
+	t_command	*cur;
+	t_command	*next;
+	int			piped[2];
+
+	cur = (*lst)->content;
+	next = (*lst)->next->content;
+	if (pipe(piped) == -1)
+			return (0);
+		next->infd = piped[0];
+		cur->outfd = piped[1];
+	return (1);
+}

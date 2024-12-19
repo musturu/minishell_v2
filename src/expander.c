@@ -118,11 +118,11 @@ t_list	*expand(t_list **list, char **env)
 	while (tmp)
 	{
 		tkn = tmp->content;
-		if (tkn->type == TOKEN_DOLLAR)
-		{
+		/*if (tkn->type == TOKEN_DOLLAR)*/
+		/*{*/
 			handle_token_expansion(tkn, env);
-			tkn->type = TOKEN_WORD;
-		}
+			/*tkn->type = TOKEN_WORD;*/
+		/*}*/
 		tmp = tmp->next;
 	}
 	return (*list);

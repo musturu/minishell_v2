@@ -40,9 +40,9 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c utils.c memory_management.c eggxecutor.c utils_exec.c utils_token_quotes.c expander.c \
+SRC = main.c tokenizer.c utils_token.c parser.c utils_parse.c utils.c memory_management.c eggxecutor.c utils_exec.c expander.c \
 	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c	builtin/export.c	builtin/unset.c	quote_expander.c\
-		heredoc.c signals.c
+		heredoc.c signals.c exp.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)

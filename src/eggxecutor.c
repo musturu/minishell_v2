@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 void get_path(char **env, t_command **command);
-void	execute_fork(t_command **cur, t_command **prev, char ***env);
+void	execute_fork(t_command **cur, char ***env);
 
 
 static int	access_or_create(char *path)
@@ -90,52 +90,36 @@ void get_path(char **env, t_command **command)
 int	execute(t_list **parsed_list, char ***env)
 {
 	t_command	*cur;
-	t_command	*next;
-	t_command	*prev;
-	int		piped[2];
 	pid_t	pid;
 
 	pid = 0;
 	if (!(*parsed_list))
 		return (1);
 	cur = (*parsed_list)->content;
-	if ((*parsed_list)->next)
-		next = (*parsed_list)->next->content;
-	if ((*parsed_list)->prev)
-		prev = (*parsed_list)->prev->content;
-	if (cur->outconnect == TOKEN_PIPE)
-	{
-		if (pipe(piped) == -1)
-			return (0);
-		next->infd = piped[0];
-		cur->outfd = piped[1];
-	}
+	if (cur->outconnect == TOKEN_PIPE && !pipes(parsed_list))
+		return (0);
 	if (NEEDFORK(cur->cmd))
 		pid = fork();
 	if (!pid)
 	{
 		if (cur->outconnect == TOKEN_PIPE)
-			close(piped[0]);
-		execute_fork(&cur, &prev, env);
+			close(((t_command *)((*parsed_list)->next->content))->infd);
+		execute_fork(&cur, env);
 	}
-	if (cur->outconnect == TOKEN_PIPE)
-		close(piped[1]);
 	if (cur->outfd != STDOUT_FILENO)
 		close(cur->outfd);
 	if (cur->infd != STDIN_FILENO)
 		close(cur->infd);
 	execute(&(*parsed_list)->next, env);
-	if (cur->outconnect != TOKEN_AND)
-		waitpid(pid, &status, 0);
+	waitpid(pid, &status, 0);
 	return (1);
 }
 
-void	execute_fork(t_command **cur, t_command **prev, char ***env)
+void	execute_fork(t_command **cur, char ***env)
 {
-	(void)prev;
 	get_path(*env, cur);
-	redir_in(*cur); //add guard
-	redir_out(*cur); //add guard
+	if (!redir_in(*cur) || !redir_out(*cur))
+		exit(printf("couldnt open files\n"));
 	if ((*cur)->infd != STDIN_FILENO)
 		dup2((*cur)->infd, STDIN_FILENO); //add dup2 guard
 	if ((*cur)->outfd != STDOUT_FILENO)

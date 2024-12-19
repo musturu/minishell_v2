@@ -28,26 +28,13 @@
 
 typedef enum
 {
-    TOKEN_WORD,         //  o comando o file ??
-    TOKEN_PIPE,         //      = |
-    TOKEN_REDIR_OUT,    //     = >
-    TOKEN_REDIR_IN,     //   m bvhcgcbcbhbjknmlkòl  = <
-    TOKEN_REDIR_APPEND, //  = >>
-    TOKEN_REDIR_PRE,    //     = <<
-    TOKEN_EOF,          // END OF FILE
-    TOKEN_AND,
-    TOKEN_DOLLAR,
-    TOKEN_OPEN_P,
-    TOKEN_CLOSE_P,
-    TOKEN_DBQUOTE,
-    TOKEN_SQUOTE,
-    TOKEN_BACKSLASH,
-    TOKEN_SPACE,
-    TOKEN_DELETE,
-    TOKEN_DPIPE,
-    TOKEN_DAND,
-    TOKEN_PCOMM
-    // Aggiungere altri tipi di token necessari
+    TOKEN_WORD,      
+    TOKEN_PIPE,     
+    TOKEN_REDIR_OUT,
+    TOKEN_REDIR_IN, 
+    TOKEN_REDIR_APPEND,
+    TOKEN_REDIR_PRE,   
+    TOKEN_EOF,        
 } e_TokenType;
 
 typedef struct s_token
@@ -74,11 +61,11 @@ extern int status;
 /*TOKENIZER*/
 void go_next(char **str);
 int space_until_next(char *str);
-t_list *tokenize(char *str, t_list **list, char **env);
+t_list *tokenize(char *str, t_list **list);
 char *squote_manager(char *str);
-char *dquote_manager(char *str, char **env);
-char	*handle_quoted_expansion(char *quoted_str, char **env);
-char	*word_manager(char *str, char **env);
+char *dquote_manager(char *str);
+char	*getwordvalue(char **str, char **ret);
+int	ft_istokenquotes(char c);
 
 /*EXPANDER*/
 t_list *expand(t_list **list, char **env);
@@ -104,6 +91,7 @@ int exec_builtin(char *cmd, char **argv, char ***env, int *ret);
 int str_to_env_index(char **env, char *name);
 int execute(t_list **parsed_list, char ***env);
 int	heredoc(t_command *command, char **env);
+int	pipes(t_list **lst);
 
 /*memory*/
 void free_command(void *cmd);

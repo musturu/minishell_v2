@@ -15,7 +15,15 @@
 int	ft_istokenchar(char c)
 {
 	if (c == '|' || c == '>' || c == '<' || c == '&'
-		/*|| c == '$'*/ || c == ')' || c == '(' || c == '"'
+		|| c == '"'
+		|| c == '\'')
+		return (1);
+	return (0);
+}
+
+int	ft_istokenquotes(char c)
+{
+	if ( c == '"'
 		|| c == '\'')
 		return (1);
 	return (0);

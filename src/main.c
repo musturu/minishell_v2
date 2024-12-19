@@ -98,33 +98,23 @@ void    read_input(char **env)
     t_list *tlist;
     t_list *plist;
 
-    tlist = NULL;
-	plist = NULL;
     while (status != -1)
     {
+    	tlist = NULL;
+		plist = NULL;
         str = readline(PROMPT" ");
         if (!str)
             return ;
         if (blank_check(str))
             continue;
         add_history(str);
-        tlist = tokenize(str, &tlist, env); //add guard
-		printf("EXIT TOKENS\n");
-		print_tokens(tlist);
+        tlist = tokenize(str, &tlist); //add guard
         free(str);
-        expand(&tlist, env);
-		printf("EXIT EXPAND\n");
-		print_tokens(tlist);
-		quote_expand(&tlist, env);
-		printf("EXIT EXPAND QUOTE\n");
-		print_tokens(tlist);
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
 		if (plist == NULL)
 			printf("syntax error\n");
 		execute(&plist, &env);
         ft_lstclear(&plist, free_command);
-        tlist = NULL;
-		plist = NULL;
     }
 }

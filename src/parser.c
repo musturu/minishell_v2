@@ -118,11 +118,6 @@ static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 	tkn = (*tokens)->content;
 	if (!(*tokens)->prev && isfirst)
 		return (0);
-	if (tkn->type == TOKEN_AND)
-	{
-		ft_lst_remove_node(tokens, *tokens, free_token);
-		return (TOKEN_AND);
-	}
 	if (tkn->type == TOKEN_PIPE)
 	{
 		ft_lst_remove_node(tokens, *tokens, free_token);
@@ -131,24 +126,15 @@ static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 	return 0;
 }
 
-//dovremmo mettere anche ||, && e ;? bho
 static e_TokenType get_command_outconnect(t_list **tokens)
 {
 	t_token	*tkn;
 
 	tkn = (*tokens)->content;
-	if (tkn->type == TOKEN_AND)
-	{
-		return (TOKEN_AND);
-	}
 	if (tkn->type == TOKEN_PIPE)
-	{
 		return (TOKEN_PIPE);
-	}
 	if (tkn->type == TOKEN_EOF)
-	{
 		return (TOKEN_EOF);
-	}
 	return 0;
 }
 
