@@ -34,25 +34,25 @@ void	free_command(void *comd)
 	t_command	*cmd;
 
 	cmd = comd;
-	if (cmd != NULL)
+	if (cmd == NULL)
+		return ;
+	if (cmd->cmd)
+		free(cmd->cmd);
+	cmd->cmd = NULL;
+	if (cmd->inpath)
+		free(cmd->inpath);
+	cmd->inpath = NULL;
+	if (cmd->outpath)
+		free(cmd->outpath);
+	cmd->outpath = NULL;
+	if (cmd->args)
 	{
-		if (cmd->cmd)
-			free(cmd->cmd);
-		cmd->cmd = NULL;
-		if (cmd->inpath)
-			free(cmd->inpath);
-		cmd->inpath = NULL;
-		if (cmd->outpath)
-			free(cmd->outpath);
-		cmd->outpath = NULL;
-		if (cmd->args)
-		{
-			ft_lstclear(&cmd->args, free);
-		}
-		free(cmd->args);
-		cmd->args = NULL;
-		if (cmd->argv)
-			free_matrix(cmd->argv);
-		cmd->argv = NULL;
+		ft_lstclear(&cmd->args, free);
 	}
+	free(cmd->args);
+	cmd->args = NULL;
+	if (cmd->argv)
+		free_matrix(cmd->argv);
+	cmd->argv = NULL;
+	free(cmd);
 }
