@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
+#    By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by lmoricon          #+#    #+#              #
-#    Updated: 2024/12/08 20:12:25 by lmoricon         ###   ########.fr        #
+#    Updated: 2024/12/20 17:03:51 by mamerlin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,9 +40,9 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c tokenizer.c utils_token.c parser.c utils_parse.c utils.c memory_management.c eggxecutor.c utils_exec.c expander.c \
-	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c	builtin/export.c	builtin/unset.c	quote_expander.c\
-		heredoc.c signals.c exp.c
+SRC = main.c tokenizer.c utils_token.c parser.c utils_parse.c utils.c memory_management.c eggxecutor.c utils_exec.c\
+	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c	builtin/export.c	builtin/unset.c\
+		heredoc.c signals.c exp.c expand.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)

@@ -92,29 +92,28 @@ void	close_fds(t_list *lst)
 	}
 }
 
-void    read_input(char **env)
-{
+void read_input(char **env) {
     char *str;
-    t_list *tlist;
-    t_list *plist;
+    t_list *tlist = NULL;
+    t_list *plist = NULL;
 
-    while (status != -1)
-    {
-    	tlist = NULL;
-		plist = NULL;
+    while (status != -1) {
         str = readline(PROMPT" ");
-        if (!str)
-            return ;
-        if (blank_check(str))
+        if (!str) break;  // Gestione dell'EOF
+        if (blank_check(str)) {
+            free(str);
             continue;
+        }
         add_history(str);
-        tlist = tokenize(str, &tlist); //add guard
+        tlist = tokenize(str, &tlist);
         free(str);
+        print_tokens(tlist);
+        tlist = expand(&tlist, env);  // Chiamata all'expander
         plist = parser(&tlist, &plist);
+        print_tokens(tlist);
+        print_parse(plist);
+        execute(&plist, &env);
         ft_lstclear(&tlist, free_token);
-		if (plist == NULL)
-			printf("syntax error\n");
-		execute(&plist, &env);
         ft_lstclear(&plist, free_command);
     }
 }

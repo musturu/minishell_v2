@@ -28,13 +28,13 @@
 
 typedef enum
 {
-    TOKEN_WORD,      
-    TOKEN_PIPE,     
+    TOKEN_WORD,
+    TOKEN_PIPE,
     TOKEN_REDIR_OUT,
-    TOKEN_REDIR_IN, 
+    TOKEN_REDIR_IN,
     TOKEN_REDIR_APPEND,
-    TOKEN_REDIR_PRE,   
-    TOKEN_EOF,        
+    TOKEN_REDIR_PRE,
+    TOKEN_EOF,
 } e_TokenType;
 
 typedef struct s_token
@@ -68,12 +68,8 @@ char	*getwordvalue(char **str, char **ret);
 int	ft_istokenquotes(char c);
 
 /*EXPANDER*/
-t_list *expand(t_list **list, char **env);
-t_list *quote_expand(t_list **list, char **env);
-char *allocate_empty_string(void);
-char *process_expansion(char *result, char **next_part, char *start, char **env);
-char *append_to_result(char *result, const char *text, size_t length);
-char *expand_multiple_env(char *input, char **env);
+t_list *expand(t_list **list);
+char *expand_token_value(const char *value);
 
 /*debug*/
 void print_tokens(t_list *list);
