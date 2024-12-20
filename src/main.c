@@ -108,7 +108,7 @@ void read_input(char **env) {
         tlist = tokenize(str, &tlist);
         free(str);
         print_tokens(tlist);
-        tlist = expand(&tlist, env);  // Chiamata all'expander
+        tlist = expand(&tlist);  // Chiamata all'expander
         plist = parser(&tlist, &plist);
         print_tokens(tlist);
         print_parse(plist);
