@@ -12,9 +12,6 @@
 #include <dirent.h>    // Per opendir, readdir, closedir
 #include <sys/ioctl.h> // Per ioctl
 #include <termios.h>   // Per tcsetattr, tcgetattr
-//#include <curses.h>    // Per alcune funzioni termcap
-//#include <term.h>      // Per altre funzioni termcap
-
 
 #include "src/builtin/builtin.h"
 
@@ -82,7 +79,6 @@ char is_after_break(t_list *tokens);
 
 /*execute*/
 int exec_builtin(char *cmd, char **argv, char ***env, int *ret);
-int str_to_env_index(char **env, char *name);
 int execute(t_list **parsed_list, char ***env);
 int	heredoc(t_command *command, char **env);
 int	pipes(t_list **lst);

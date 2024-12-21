@@ -68,8 +68,8 @@ void get_path(char **env, t_command **command)
 		return ;
 	i = -1;
 	cmd = ft_strjoin("/", (*command)->cmd);
-	paths = ft_split(env[str_to_env_index(env, "PATH")], ':');
-	ret	= ft_strjoin(paths[i], cmd);
+	paths = ft_split(get_env(env, "PATH"), ':');
+	ret	= ft_strjoin(paths[0], cmd);
 	while (paths[++i] && access(ret, F_OK) != 0)
 	{
 		free(ret);

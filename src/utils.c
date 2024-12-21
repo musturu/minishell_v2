@@ -14,22 +14,22 @@
 #include "../minishell.h"
 #include <stdio.h>
 
-int	str_to_env_index(char **env, char *name)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = ft_strlen(name);
-	while (env[i])
-	{
-		/* Check if current environment string starts with 'name' followed by '=' */
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
+/*int	str_to_env_index(char **env, char *name)*/
+/*{*/
+/*	int	i;*/
+/*	int	len;*/
+/**/
+/*	i = 0;*/
+/*	len = ft_strlen(name);*/
+/*	while (env[i])*/
+/*	{*/
+/*		 Check if current environment string starts with 'name' followed by '=' */
+/*		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')*/
+/*			return (i);*/
+/*		i++;*/
+/*	}*/
+/*	return (-1);*/
+/*}*/
 
 char	*get_env(char **env, char *name)
 {

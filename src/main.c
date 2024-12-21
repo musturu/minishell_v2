@@ -40,7 +40,7 @@ static void    read_input(char **env)
         add_history(str);
         tlist = tokenize(str, &tlist);
         free(str);
-        tlist = expand(&tlist);
+        /*tlist = expand(&tlist);*/
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
         execute(&plist, &env);
