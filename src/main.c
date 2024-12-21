@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void    read_input(char **env);
+static t_list	*parser(t_list **tokens, t_list **parsed_list);
+static void    read_input(char **env);
 
 int status;
 
@@ -18,50 +19,8 @@ int main(int argc, char **argv, char **env)
     return(0);
 }
 
-void    print_parse(t_list *list)
-{
-    t_list  *tmp = list;
-    t_command     *cmd;
-	t_list	*tmparg;
 
-	printf("\n______________PARSER_______________\n");
-    while (tmp)
-    {
-        printf("NEW COMMAND\t");
-        cmd = tmp->content;
-        printf("CMD: %s\n", cmd->cmd);
-		tmparg = cmd->args;
-        while (tmparg)
-        {
-            printf("\tARG: %s\n",  (char *)tmparg->content);
-            tmparg = tmparg->next;
-        }
-		printf("\n\tINPATH:%s -----> OUTPATH:%s\n", cmd->inpath, cmd->outpath);
-		if (cmd->inconnect)
-			printf("CONNECTOR IN: %i (1 = PIPE, 7 = &)\n", cmd->inconnect);
-		if (cmd->outconnect)
-			printf("CONNECTOR OUT: %i\n", cmd->outconnect);
-        tmp = tmp->next;
-    }
-	printf("\n______________________________________\n");
-}
-
-void    print_tokens(t_list *list)
-{
-    t_list  *tmp = list;
-    t_token   *tkn;
-
-	printf("\n________________TOKENS_________________\n");
-    while (tmp)
-    {
-        tkn = tmp->content;
-        printf("TYPE:\t%i\tVALUE:\t[%s]\tprev: [%p] - cur : [%p]\n", tkn->type, tkn->value, tmp->prev, tmp);
-        tmp = tmp->next;
-    }
-	printf("\n______________________________________\n");
-}
-
-int blank_check(char *str)
+static int blank_check(char *str)
 {
     int i;
 
@@ -75,6 +34,7 @@ int blank_check(char *str)
     return (1);
 }
 
+<<<<<<< Updated upstream
 void	close_fds(t_list *lst)
 {
 	t_list	*cmd;
@@ -93,6 +53,10 @@ void	close_fds(t_list *lst)
 }
 
 void read_input(char **env) {
+=======
+static void    read_input(char **env)
+{
+>>>>>>> Stashed changes
     char *str;
     t_list *tlist = NULL;
     t_list *plist = NULL;
@@ -110,10 +74,31 @@ void read_input(char **env) {
         print_tokens(tlist);
         tlist = expand(&tlist);  // Chiamata all'expander
         plist = parser(&tlist, &plist);
+<<<<<<< Updated upstream
         print_tokens(tlist);
         print_parse(plist);
         execute(&plist, &env);
+=======
+		print_parse(plist);
+>>>>>>> Stashed changes
         ft_lstclear(&tlist, free_token);
         ft_lstclear(&plist, free_command);
     }
 }
+
+
+static t_list	*parser(t_list **tokens, t_list **parsed_list)
+{
+	if (!*tokens || ((t_token *)(*tokens)->content)->type == TOKEN_EOF)
+		return (*parsed_list);
+	if (!append_cmd(tokens, parsed_list))
+	{
+		ft_lstclear(parsed_list, free_command);
+		ft_lstclear(tokens, free_token);
+		return (NULL);
+	}
+	return (parser(tokens, parsed_list));
+}
+
+
+

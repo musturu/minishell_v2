@@ -14,11 +14,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
 /*
  * the parser functions in the same way the tokenizer does, by calling
- * itself it attaches
- * at the end of the list a new node,
+ * itself it attaches a new node at the end of the list
  * consuming the utilized token nodes in the process.
  */
 
@@ -39,8 +37,9 @@ static char	*get_command_command(t_list **tokens)
 }
 
 /*
-*	cycles trough the list tokens by destroying the current element,
-*	 using lst_remove_node
+*	cycles trough the list TOKEN_WORDS which are consecutive, destroying the 
+*	current element,
+*	after having copied its content to the using lst_remove_node
 */
 static t_list	*get_command_args(t_list **tokens)
 {
@@ -66,12 +65,14 @@ static char	*get_command_in(t_list **tokens)
 	lst = *tokens;
 	while (lst && !is_break(lst))
 	{
-		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_IN || ((t_token *)(lst->content))->type == TOKEN_REDIR_PRE) && lst->next)
+		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_IN 
+			|| ((t_token *)(lst->content))->type == TOKEN_REDIR_PRE) && lst->next)
 		{
 			lst = lst->next;
 			if (is_string(((t_token *)(lst->content))->type))
 			{
-				ret = ft_strjoin(((t_token *)(lst->prev->content))->value, ((t_token *)(lst->content))->value);
+				ret = ft_strjoin(((t_token *)(lst->prev->content))->value, 
+					 ((t_token *)(lst->content))->value);
 				ft_lst_remove_node(tokens, lst->prev, free_token);
 				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
@@ -92,12 +93,15 @@ static char	*get_command_out(t_list **tokens)
 	lst = *tokens;
 	while (lst && !is_break(lst))
 	{
-		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_OUT || ((t_token *)(lst->content))->type == TOKEN_REDIR_APPEND) && (*tokens)->next)
+		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_OUT
+			|| ((t_token *)(lst->content))->type == TOKEN_REDIR_APPEND) 
+			&& (*tokens)->next)
 		{
 			lst = lst->next;
 			if (is_string(((t_token *)(lst->content))->type))
 			{
-				ret = ft_strjoin(((t_token *)(lst->prev->content))->value, ((t_token *)(lst->content))->value);
+				ret = ft_strjoin(((t_token *)(lst->prev->content))->value,
+					 ((t_token *)(lst->content))->value);
 				ft_lst_remove_node(tokens, lst->prev, free_token);
 				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
@@ -110,35 +114,17 @@ static char	*get_command_out(t_list **tokens)
 	return (NULL);
 }
 
-//dovremmo mettere anche || e && ? bho
-static e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
-{
-	t_token	*tkn;
-
-	tkn = (*tokens)->content;
-	if (!(*tokens)->prev && isfirst)
-		return (0);
-	if (tkn->type == TOKEN_PIPE)
-	{
-		ft_lst_remove_node(tokens, *tokens, free_token);
-		return (TOKEN_PIPE);
-	}
-	return 0;
-}
-
-static e_TokenType get_command_outconnect(t_list **tokens)
-{
-	t_token	*tkn;
-
-	tkn = (*tokens)->content;
-	if (tkn->type == TOKEN_PIPE)
-		return (TOKEN_PIPE);
-	if (tkn->type == TOKEN_EOF)
-		return (TOKEN_EOF);
-	return 0;
-}
-
-static int	append_cmd(t_list	**tokens, t_list **parsed_list)
+/*
+*	append_cmd works by creating a command element, it starts 
+*	by searching in all the list for
+*	redirections, limiting the search by "breaks" (| and EOF) 
+*	then it moves on, by eliminating the
+*	redirections, which can be anywhere on the command string, 
+*	we are left with a command as the first element of the token list
+*	then every subsequent word is an argument to the command
+*	and lastly we have an out_connector (| and EOF)
+*/
+int	append_cmd(t_list	**tokens, t_list **parsed_list)
 {
 	t_command	*cmd;
 
@@ -155,22 +141,11 @@ static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 	cmd->cmd = get_command_command(tokens);
 	if (cmd->cmd)
 		cmd->args = get_command_args(tokens);
-	cmd->outconnect = get_command_outconnect(tokens);
+	cmd->outconnect = ((t_token *)(*tokens)->content)->type;
 	cmd->outfd = STDOUT_FILENO;
 	cmd->infd = STDIN_FILENO;
 	ft_lstadd_back(parsed_list, ft_lstnew(cmd));
 	return (1);
 }
 
-t_list	*parser(t_list **tokens, t_list **parsed_list)
-{
-	if (!*tokens || ((t_token *)(*tokens)->content)->type == TOKEN_EOF)
-		return (*parsed_list);
-	if (!append_cmd(tokens, parsed_list))
-	{
-		ft_lstclear(parsed_list, free_command);
-		ft_lstclear(tokens, free_token);
-		return (NULL);
-	}
-	return (parser(tokens, parsed_list));
-}
+

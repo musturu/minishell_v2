@@ -14,7 +14,7 @@
 
 int	ft_istokenchar(char c)
 {
-	if (c == '|' || c == '>' || c == '<' || c == '&'
+	if (c == '|' || c == '>' || c == '<'
 		|| c == '"'
 		|| c == '\'')
 		return (1);
@@ -34,12 +34,6 @@ int	ft_isspace(char c)
 	if (c == ' ' || c == '\t')
 		return (1);
 	return (0);
-}
-
-void	go_next(char **str)
-{
-	while (ft_isspace(**str))
-		*str = *str + 1;
 }
 
 int	space_until_next(char *str)

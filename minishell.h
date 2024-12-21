@@ -59,12 +59,10 @@ typedef struct s_cmd
 extern int status;
 
 /*TOKENIZER*/
-void go_next(char **str);
 int space_until_next(char *str);
 t_list *tokenize(char *str, t_list **list);
 char *squote_manager(char *str);
 char *dquote_manager(char *str);
-char	*getwordvalue(char **str, char **ret);
 int	ft_istokenquotes(char c);
 
 /*EXPANDER*/
@@ -76,7 +74,8 @@ void print_tokens(t_list *list);
 void print_parse(t_list *list);
 
 /*parser*/
-t_list *parser(t_list **tokens, t_list **parsed_list);
+int	append_cmd(t_list	**tokens, t_list **parsed_list);
+e_TokenType get_command_inconnect(t_list **tokens, int isfirst);
 char is_redirection(e_TokenType type);
 char is_break(t_list *tokens);
 char is_string(e_TokenType type);

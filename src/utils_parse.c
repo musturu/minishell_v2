@@ -36,3 +36,18 @@ char	is_redirection(e_TokenType type)
 		|| type == TOKEN_REDIR_PRE
 		|| type == TOKEN_REDIR_APPEND);
 }
+
+e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
+{
+	t_token	*tkn;
+
+	tkn = (*tokens)->content;
+	if (!(*tokens)->prev && isfirst)
+		return (0);
+	if (tkn->type == TOKEN_PIPE)
+	{
+		ft_lst_remove_node(tokens, *tokens, free_token);
+		return (TOKEN_PIPE);
+	}
+	return 0;
+}
