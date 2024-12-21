@@ -61,9 +61,8 @@ extern int status;
 /*TOKENIZER*/
 int space_until_next(char *str);
 t_list *tokenize(char *str, t_list **list);
-char *squote_manager(char *str);
-char *dquote_manager(char *str);
 int	ft_istokenquotes(char c);
+int	append_token(char **str, t_list **lst);
 
 /*EXPANDER*/
 t_list *expand(t_list **list);
@@ -94,6 +93,7 @@ void free_token(void *tkn);
 void free_matrix(char **mat);
 
 /*utils*/
+int blank_check(char *str);
 char    **ft_matdup(char **mat);
 char	*get_env(char **env, char *name);
 char **listomap(char *cmd, t_list *list);

@@ -49,7 +49,7 @@ static char	*get_token_value(char *str, e_TokenType type)
 		return (NULL);
 }
 
-static int	append_token(char **str, t_list **lst)
+int	append_token(char **str, t_list **lst)
 {
 	t_token	*tok;
 

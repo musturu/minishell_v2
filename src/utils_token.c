@@ -50,3 +50,16 @@ int	space_until_next(char *str)
 	return (i);
 }
 
+int blank_check(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (!ft_isspace(str[i]))
+            return (0);
+        i++;
+    }
+    return (1);
+}
