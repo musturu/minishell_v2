@@ -19,73 +19,63 @@ int main(int argc, char **argv, char **env)
     return(0);
 }
 
-
-static int blank_check(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
-        if (!ft_isspace(str[i]))
-            return (0);
-        i++;
-    }
-    return (1);
-}
-
-<<<<<<< Updated upstream
-void	close_fds(t_list *lst)
-{
-	t_list	*cmd;
-	t_command	command;
-
-	cmd = lst;
-	while (cmd)
-	{
-		command = *(t_command *)cmd->content;
-		if (command.infd != STDIN_FILENO)
-			close(command.infd);
-		if (command.outfd != STDOUT_FILENO)
-			close(command.outfd);
-		cmd = cmd->next;
-	}
-}
-
-void read_input(char **env) {
-=======
 static void    read_input(char **env)
 {
->>>>>>> Stashed changes
     char *str;
-    t_list *tlist = NULL;
-    t_list *plist = NULL;
+    t_list *tlist;
+    t_list *plist;
 
-    while (status != -1) {
-        str = readline(PROMPT" ");
-        if (!str) break;  // Gestione dell'EOF
-        if (blank_check(str)) {
+    while (status != -1) 
+	{
+		tlist = NULL;
+		plist = NULL;
+		str = readline(PROMPT" ");
+        if (!str)
+			break;
+        if (blank_check(str))
+		{
             free(str);
             continue;
         }
         add_history(str);
         tlist = tokenize(str, &tlist);
         free(str);
-        print_tokens(tlist);
-        tlist = expand(&tlist);  // Chiamata all'expander
+        tlist = expand(&tlist);
         plist = parser(&tlist, &plist);
-<<<<<<< Updated upstream
-        print_tokens(tlist);
-        print_parse(plist);
-        execute(&plist, &env);
-=======
-		print_parse(plist);
->>>>>>> Stashed changes
         ft_lstclear(&tlist, free_token);
+        execute(&plist, &env);
         ft_lstclear(&plist, free_command);
     }
 }
 
+t_list	*tokenize(char *str, t_list **list)
+{
+	while (ft_isspace(*str))
+		str = str + 1;
+	if (!*str)
+	{
+		if (!append_token(&str, list))
+			return (NULL);
+		return (*list);
+	}
+	if (!append_token(&str, list))
+		return (NULL);
+	return (tokenize(str, list));
+}
+
+t_list *expand(t_list **list) {
+    t_list *current = *list;
+    while (current) {
+        t_token *token = (t_token *)current->content;
+        if (token->type == TOKEN_WORD) {
+            char *new_value = expand_token_value(token->value);
+            free(token->value);
+            token->value = new_value;
+        }
+        current = current->next;
+    }
+    return *list;
+}
 
 static t_list	*parser(t_list **tokens, t_list **parsed_list)
 {
@@ -99,6 +89,4 @@ static t_list	*parser(t_list **tokens, t_list **parsed_list)
 	}
 	return (parser(tokens, parsed_list));
 }
-
-
 
