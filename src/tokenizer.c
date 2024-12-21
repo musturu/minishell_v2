@@ -65,20 +65,6 @@ int	append_token(char **str, t_list **lst)
 	return (1);
 }
 
-t_list	*tokenize(char *str, t_list **list)
-{
-	while (ft_isspace(*str))
-		str = str + 1;
-	if (!*str)
-	{
-		if (!append_token(&str, list))
-			return (NULL);
-		return (*list);
-	}
-	if (!append_token(&str, list))
-		return (NULL);
-	return (tokenize(str, list));
-}
 
 static char	*getwordvalue(char **str, char **ret)
 {

@@ -46,16 +46,3 @@ char *expand_token_value(const char *value) {
     return result;
 }
 
-t_list *expand(t_list **list) {
-    t_list *current = *list;
-    while (current) {
-        t_token *token = (t_token *)current->content;
-        if (token->type == TOKEN_WORD) {
-            char *new_value = expand_token_value(token->value);
-            free(token->value);
-            token->value = new_value;
-        }
-        current = current->next;
-    }
-    return *list;
-}
