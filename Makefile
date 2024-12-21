@@ -42,7 +42,7 @@ RM 			= rm -rf
 
 SRC = main.c tokenizer.c utils_token.c parser.c utils_parse.c utils.c memory_management.c eggxecutor.c utils_exec.c\
 	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c	builtin/export.c	builtin/unset.c\
-		heredoc.c signals.c exp.c expand.c
+		heredoc.c signals.c expand.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
