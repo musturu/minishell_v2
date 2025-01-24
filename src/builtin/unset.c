@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 20:35:54 by lmoricon          #+#    #+#             */
+/*   Updated: 2025/01/24 20:36:32 by lmoricon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtin.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -12,10 +24,9 @@ static void	sort_env(char ***en, int index)
 	(*en)[index] = NULL;
 }
 
-
 int	unset(char **argv, char ***env)
 {
-	int		i;
+	int	i;
 	int	present;
 
 	i = 1;
