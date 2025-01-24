@@ -53,7 +53,7 @@ typedef struct s_cmd
     e_TokenType outconnect;
 } t_command;
 
-extern int status;
+extern int g_status;
 
 /*TOKENIZER*/
 int space_until_next(char *str);
@@ -62,8 +62,9 @@ int	ft_istokenquotes(char c);
 int	append_token(char **str, t_list **lst);
 
 /*EXPANDER*/
-t_list *expand(t_list **list);
+t_list *expand(t_list **list, char **env);
 char *expand_token_value(const char *value);
+char	*expand_token(char *str, char **env);
 
 /*debug*/
 void print_tokens(t_list *list);

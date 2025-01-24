@@ -12,9 +12,9 @@ static void	readdoc(t_command *command, char **env, int fd)
 	while (++i)
 	{
 		if (i % 2 == 1)
-			line = readline("(.)       ");
-		else
 		 	line = readline("--------D ");
+		else
+			line = readline("(.)       ");
 		if (!line)
 			break ;
 		if (!ft_strncmp(line, command->inpath + 2, ft_strlen(command->inpath + 2)))
@@ -51,5 +51,5 @@ int	heredoc(t_command *command, char **env)
 	command->infd = dup(fds[0]);
 	close(fds[0]);
 	ft_signals();
-	return (0);
+	return (1);
 }

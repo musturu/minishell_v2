@@ -5,13 +5,13 @@
 static t_list	*parser(t_list **tokens, t_list **parsed_list);
 static void    read_input(char **env);
 
-int status;
+int g_status;
 
 int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-    status = 0;
+    g_status = 0;
     env = ft_matdup(env);
     ft_signals();
     read_input(env);
@@ -25,7 +25,7 @@ static void    read_input(char **env)
     t_list *tlist;
     t_list *plist;
 
-    while (status != -1) 
+    while (g_status != -1) 
 	{
 		tlist = NULL;
 		plist = NULL;
@@ -40,7 +40,7 @@ static void    read_input(char **env)
         add_history(str);
         tlist = tokenize(str, &tlist);
         free(str);
-        /*tlist = expand(&tlist);*/
+        tlist = expand(&tlist, env);
         plist = parser(&tlist, &plist);
         ft_lstclear(&tlist, free_token);
         execute(&plist, &env);
@@ -63,13 +63,20 @@ t_list	*tokenize(char *str, t_list **list)
 	return (tokenize(str, list));
 }
 
-t_list *expand(t_list **list) {
-    t_list *current = *list;
-    while (current) {
-        t_token *token = (t_token *)current->content;
+t_list *expand(t_list **list, char **env)
+{
+    t_list *current;
+	t_token *token;
+	char *new_value;
+
+	current = *list;
+    while (current)
+	{
+        token = (t_token *)current->content;
         if (token->type == TOKEN_WORD) {
-            char *new_value = expand_token_value(token->value);
+            new_value = expand_token(token->value, env);
             free(token->value);
+			printf("token_value=%s\n", new_value);
             token->value = new_value;
         }
         current = current->next;

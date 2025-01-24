@@ -110,7 +110,7 @@ int	execute(t_list **parsed_list, char ***env)
 	if (cur->infd != STDIN_FILENO)
 		close(cur->infd);
 	execute(&(*parsed_list)->next, env);
-	waitpid(pid, &status, 0);
+	waitpid(pid, &g_status, 0);
 	return (1);
 }
 
@@ -127,9 +127,9 @@ void	execute_fork(t_command **cur, char ***env)
 		exit(0);
 	(*cur)->argv = listomap((*cur)->cmd, (*cur)->args);
 	if (is_builtin((*cur)->cmd) != -1)
-			exec_builtin((*cur)->cmd, (*cur)->argv, env, &status);
+			exec_builtin((*cur)->cmd, (*cur)->argv, env, &g_status);
 	else if (execve((*cur)->cmd ,(*cur)->argv, *env) == -1)
 			printf("command %s not found\n", (*cur)->cmd);
 	if (NEEDFORK((*cur)->cmd))
-		exit(status);
+		exit(g_status);
 }

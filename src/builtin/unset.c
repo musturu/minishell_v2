@@ -25,7 +25,6 @@ int	unset(char **argv, char ***env)
 		if (present >= 0)
 		{
 			free((*env)[present]);
-			printf("wa\n/n");
 			(*env)[present] = NULL;
 			sort_env(env, present);
 		}

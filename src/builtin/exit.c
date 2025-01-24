@@ -2,6 +2,6 @@
 
 int ft_exit()
 {
-	status = -1;
+	g_status = -1;
 	return (-1);
 }
