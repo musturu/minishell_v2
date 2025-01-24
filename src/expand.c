@@ -1,4 +1,5 @@
 #include "../minishell.h"
+#include "builtin/builtin.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -31,7 +32,12 @@ char	*expand_var(char *var, char **env)
     if (*var == '?')
         ret = ft_itoa(g_status);
     else
-        ret = ft_strdup(get_env(env, var));
+	{
+		if (get_env(env, var))
+        	ret = ft_strdup(get_env(env, var));
+		else
+		 return ft_strdup("");
+	}
     var[start] = c;
     return (ret);
 }	
@@ -99,9 +105,7 @@ char	*expand_token(char *str, char **env)
         else
         {
             swp = ret;
-			printf("ret=%s, c = %c\n", ret, *str);
             ret = ft_strjoin_char(ret, *str);
-			printf("ret=%s, c = %c\n", ret, *str);
             free(swp);
         }
         str++;
