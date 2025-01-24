@@ -6,30 +6,12 @@
 /*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:17:06 by mamerlin          #+#    #+#             */
-/*   Updated: 2024/12/18 14:17:09 by mamerlin         ###   ########.fr       */
+/*   Updated: 2025/01/24 20:56:49 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../minishell.h"
 #include <stdio.h>
-
-/*int	str_to_env_index(char **env, char *name)*/
-/*{*/
-/*	int	i;*/
-/*	int	len;*/
-/**/
-/*	i = 0;*/
-/*	len = ft_strlen(name);*/
-/*	while (env[i])*/
-/*	{*/
-/*		 Check if current environment string starts with 'name' followed by '=' */
-/*		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')*/
-/*			return (i);*/
-/*		i++;*/
-/*	}*/
-/*	return (-1);*/
-/*}*/
 
 char	*get_env(char **env, char *name)
 {
@@ -40,7 +22,8 @@ char	*get_env(char **env, char *name)
 	len = ft_strlen(name);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
+		if (ft_strncmp(env[i], name, len) == 0
+			&& env[i][len] == '=')
 			return (env[i] + len + 1);
 		i++;
 	}
