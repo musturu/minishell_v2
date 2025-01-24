@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:53:58 by lmoricon          #+#    #+#             */
-/*   Updated: 2025/01/24 20:55:43 by lmoricon         ###   ########.fr       */
+/*   Updated: 2025/01/24 21:06:13 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,13 @@ int	pipes(t_list **lst)
 	next->infd = piped[0];
 	cur->outfd = piped[1];
 	return (1);
+}
+
+int	access_or_create(char *path)
+{
+	if (access(path, W_OK) == 0)
+		return (1);
+	else if (access(path, F_OK) == -1)
+		return (-1);
+	return (0);
 }

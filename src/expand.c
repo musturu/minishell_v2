@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 21:07:59 by lmoricon          #+#    #+#             */
+/*   Updated: 2025/01/24 21:07:59 by lmoricon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 #include "builtin/builtin.h"
 #include <stdio.h>
@@ -79,44 +91,4 @@ char	*remove_quotes(char *str)
 	}
 	result[j] = '\0';
 	return (result);
-}
-
-char	*expand_token(char *str, char **env)
-{
-	char	*tmp;
-	char	*swp;
-	char	*ret;
-	char	in_single_quote;
-	char	in_double_quote;
-
-	in_single_quote = 0;
-	in_double_quote = 0;
-	ret = ft_strdup("");
-	while (*str)
-	{
-		if (*str == '\'')
-			in_single_quote = !in_single_quote;
-		else if (*str == '"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		else if (*str == '$' && !in_single_quote)
-		{
-			str++;
-			tmp = expand_var(str, env);
-			str += var_len(str);
-			swp = ret;
-			ret = ft_strjoin(ret, tmp);
-			free(tmp);
-			free(swp);
-			continue ;
-		}
-		else
-		{
-			swp = ret;
-			ret = ft_strjoin_char(ret, *str);
-			free(swp);
-		}
-		str++;
-	}
-	ret = remove_quotes(ret);
-	return (ret);
 }

@@ -65,6 +65,14 @@ int	append_token(char **str, t_list **lst);
 t_list *expand(t_list **list, char **env);
 char *expand_token_value(const char *value);
 char	*expand_token(char *str, char **env);
+char	*ft_strjoin_char(char *s1, char c);
+char	*expand_var(char *var, char **env);
+int	var_len(char *var);
+char	*remove_quotes(char *str);
+char	*expand_token(char *str, char **env);
+
+
+
 
 /*debug*/
 void print_tokens(t_list *list);
@@ -83,6 +91,7 @@ int exec_builtin(char *cmd, char **argv, char ***env, int *ret);
 int execute(t_list **parsed_list, char ***env);
 int	heredoc(t_command *command, char **env);
 int	pipes(t_list **lst);
+int	access_or_create(char *path);
 
 /*memory*/
 void free_command(void *cmd);

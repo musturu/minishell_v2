@@ -1,18 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   eggxecutor.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 21:04:23 by lmoricon          #+#    #+#             */
+/*   Updated: 2025/01/24 21:14:16 by lmoricon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 #include <stdio.h>
 #include <unistd.h>
 
 void	get_path(char **env, t_command **command);
 void	execute_fork(t_command **cur, char ***env);
-
-static int	access_or_create(char *path)
-{
-	if (access(path, W_OK) == 0)
-		return (1);
-	else if (access(path, F_OK) == -1)
-		return (-1);
-	return (0);
-}
 
 static int	redir_out(t_command *cmd)
 {
@@ -60,18 +63,17 @@ static int	redir_in(t_command *cmd)
 	return (1);
 }
 
-void	get_path(char **env, t_command **command)
+void	get_path(char **env, t_command **c)
 {
 	char	**paths;
 	char	*cmd;
 	char	*ret;
 	int		i;
 
-	if (is_builtin((*command)->cmd) >= 0
-		||!access((*command)->cmd, F_OK) || !(*command)->cmd)
+	if (is_builtin((*c)->cmd) >= 0 ||!access((*c)->cmd, F_OK) || !(*c)->cmd)
 		return ;
 	i = -1;
-	cmd = ft_strjoin("/", (*command)->cmd);
+	cmd = ft_strjoin("/", (*c)->cmd);
 	paths = ft_split(get_env(env, "PATH"), ':');
 	ret = ft_strjoin(paths[0], cmd);
 	while (paths[++i] && access(ret, F_OK) != 0)
@@ -83,8 +85,8 @@ void	get_path(char **env, t_command **command)
 	free_matrix(paths);
 	if (access(ret, F_OK) == 0)
 	{
-		free((*command)->cmd);
-		(*command)->cmd = ret;
+		free((*c)->cmd);
+		(*c)->cmd = ret;
 		return ;
 	}
 	free (ret);

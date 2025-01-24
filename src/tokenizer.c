@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/12/18 14:10:19 by mamerlin         ###   ########.fr       */
+/*   Updated: 2025/01/24 21:23:51 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,15 @@ int	append_token(char **str, t_list **lst)
 	return (1);
 }
 
+static char	*handle_load(char **str)
+{
+	if (**str != '"' && **str != '\'')
+		return (ft_substr(*str, 0, space_until_next(*str)));
+	if (ft_strchr(*str, **str))
+		return (ft_substr(*str, 0, ft_strchr(*str + 1, **str) - *str));
+	return (NULL);
+}
+
 static char	*getwordvalue(char **str, char **ret)
 {
 	char	*tmp;
@@ -80,15 +89,9 @@ static char	*getwordvalue(char **str, char **ret)
 		free(*ret);
 		return (tmp);
 	}
-	if (**str != '"' && **str != '\'')
-		load = ft_substr(*str, 0, space_until_next(*str));
-	else
-	{
-		if (ft_strchr(*str, **str))
-			load = ft_substr(*str, 0, ft_strchr(*str + 1, **str) - *str);
-		else
-			return (NULL);
-	}
+	load = handle_load(str);
+	if (!load)
+		return (NULL);
 	*ret = ft_strjoin(*ret, load);
 	*str += ft_strlen(load);
 	free(tmp);

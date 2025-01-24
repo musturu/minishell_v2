@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+         #
+#    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by lmoricon          #+#    #+#              #
-#    Updated: 2024/12/20 17:03:51 by mamerlin         ###   ########.fr        #
+#    Updated: 2025/01/24 21:24:11 by lmoricon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ RM 			= rm -rf
 
 SRC = main.c tokenizer.c utils_token.c parser.c utils_parse.c utils.c memory_management.c eggxecutor.c utils_exec.c\
 	  builtin/cd.c builtin/echo.c builtin/exit.c builtin/pwd.c builtin/env.c	builtin/export.c	builtin/unset.c\
-		heredoc.c signals.c expand.c
+		heredoc.c signals.c expand.c utils_expand.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
