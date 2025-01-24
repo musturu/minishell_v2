@@ -76,7 +76,6 @@ t_list *expand(t_list **list, char **env)
         if (token->type == TOKEN_WORD) {
             new_value = expand_token(token->value, env);
             free(token->value);
-			printf("token_value=%s\n", new_value);
             token->value = new_value;
         }
         current = current->next;

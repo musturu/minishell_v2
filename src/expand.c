@@ -47,7 +47,7 @@ int	var_len(char *var)
     int		start;
 
     start = 0;
-    while (ft_isalnum(var[start]) || var[start] == '_')
+    while ((ft_isalnum(var[start]) && var[start] != '?') || var[start] == '_')
         start++;
     return (start);
 }
