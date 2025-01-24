@@ -25,7 +25,7 @@ char	*expand_var(char *var, char **env)
     char	c;
 
     start = 0;
-    while (ft_isalnum(var[start]) || var[start] == '_')
+    while ((ft_isalnum(var[start]) && var[start] == '?') || var[start] == '_')
         start++;
     c = var[start];
     var[start] = '\0';
