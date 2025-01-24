@@ -25,19 +25,19 @@ char	*expand_var(char *var, char **env)
     char	c;
 
     start = 0;
-    while ((ft_isalnum(var[start]) && var[start] == '?') || var[start] == '_')
+   	if (var[start] == '?')
+	{
+        ret = ft_itoa(g_status);
+		return (ret);
+	}
+    while (ft_isalnum(var[start]) || var[start] == '_')
         start++;
     c = var[start];
     var[start] = '\0';
-    if (*var == '?')
-        ret = ft_itoa(g_status);
-    else
-	{
-		if (get_env(env, var))
-        	ret = ft_strdup(get_env(env, var));
-		else
-		 return ft_strdup("");
-	}
+	if (get_env(env, var))
+        ret = ft_strdup(get_env(env, var));
+	else
+		ret = ft_strdup("");
     var[start] = c;
     return (ret);
 }	
@@ -47,7 +47,9 @@ int	var_len(char *var)
     int		start;
 
     start = 0;
-    while ((ft_isalnum(var[start]) && var[start] == '?') || var[start] == '_')
+	if (*var == '?')
+		return (1);
+    while (ft_isalnum(var[start]) || var[start] == '_')
         start++;
     return (start);
 }
