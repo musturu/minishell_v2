@@ -6,7 +6,7 @@
 /*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:35 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/12/18 14:56:54 by mamerlin         ###   ########.fr       */
+/*   Updated: 2025/01/24 20:49:57 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	ft_istokenchar(char c)
 
 int	ft_istokenquotes(char c)
 {
-	if ( c == '"'
-		|| c == '\'')
+	if (c == '"' || c == '\'')
 		return (1);
 	return (0);
 }
@@ -50,16 +49,16 @@ int	space_until_next(char *str)
 	return (i);
 }
 
-int blank_check(char *str)
+int	blank_check(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (!ft_isspace(str[i]))
-            return (0);
-        i++;
-    }
-    return (1);
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isspace(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
