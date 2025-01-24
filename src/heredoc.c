@@ -12,14 +12,14 @@ static void	readdoc(t_command *command, char **env, int fd)
 	while (++i)
 	{
 		if (i % 2 == 1)
-		 	line = readline("--------D ");
+			line = readline("--------D ");
 		else
 			line = readline("(.)       ");
 		if (!line)
 			break ;
-		if (!ft_strncmp(line, command->inpath + 2, ft_strlen(command->inpath + 2)))
+		if (!ft_strncmp(line, command->inpath
+				+ 2, ft_strlen(command->inpath + 2)))
 			break ;
-		//remember to expand line
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
 		free(line);

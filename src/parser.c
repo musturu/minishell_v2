@@ -14,12 +14,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-/*
- * the parser functions in the same way the tokenizer does, by calling
- * itself it attaches a new node at the end of the list
- * consuming the utilized token nodes in the process.
- */
-
 static char	*get_command_command(t_list **tokens)
 {
 	t_token	*tkn;
@@ -37,7 +31,7 @@ static char	*get_command_command(t_list **tokens)
 }
 
 /*
-*	cycles trough the list TOKEN_WORDS which are consecutive, destroying the 
+*	cycles trough the list TOKEN_WORDS which are consecutive, destroying the
 *	current element,
 *	after having copied its content to the using lst_remove_node
 */
@@ -65,14 +59,15 @@ static char	*get_command_in(t_list **tokens)
 	lst = *tokens;
 	while (lst && !is_break(lst))
 	{
-		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_IN 
-			|| ((t_token *)(lst->content))->type == TOKEN_REDIR_PRE) && lst->next)
+		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_IN
+			|| ((t_token *)(lst->content))->type == TOKEN_REDIR_PRE)
+					&& lst->next)
 		{
 			lst = lst->next;
 			if (is_string(((t_token *)(lst->content))->type))
 			{
-				ret = ft_strjoin(((t_token *)(lst->prev->content))->value, 
-					 ((t_token *)(lst->content))->value);
+				ret = ft_strjoin(((t_token *)(lst->prev->content))->value,
+						((t_token *)(lst->content))->value);
 				ft_lst_remove_node(tokens, lst->prev, free_token);
 				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
@@ -94,14 +89,14 @@ static char	*get_command_out(t_list **tokens)
 	while (lst && !is_break(lst))
 	{
 		if ((((t_token *)(lst->content))->type == TOKEN_REDIR_OUT
-			|| ((t_token *)(lst->content))->type == TOKEN_REDIR_APPEND) 
+			|| ((t_token *)(lst->content))->type == TOKEN_REDIR_APPEND)
 			&& (*tokens)->next)
 		{
 			lst = lst->next;
 			if (is_string(((t_token *)(lst->content))->type))
 			{
 				ret = ft_strjoin(((t_token *)(lst->prev->content))->value,
-					 ((t_token *)(lst->content))->value);
+						((t_token *)(lst->content))->value);
 				ft_lst_remove_node(tokens, lst->prev, free_token);
 				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
@@ -115,11 +110,11 @@ static char	*get_command_out(t_list **tokens)
 }
 
 /*
-*	append_cmd works by creating a command element, it starts 
+*	append_cmd works by creating a command element, it starts
 *	by searching in all the list for
-*	redirections, limiting the search by "breaks" (| and EOF) 
+*	redirections, limiting the search by "breaks" (| and EOF)
 *	then it moves on, by eliminating the
-*	redirections, which can be anywhere on the command string, 
+*	redirections, which can be anywhere on the command string,
 *	we are left with a command as the first element of the token list
 *	then every subsequent word is an argument to the command
 *	and lastly we have an out_connector (| and EOF)
@@ -147,5 +142,3 @@ int	append_cmd(t_list	**tokens, t_list **parsed_list)
 	ft_lstadd_back(parsed_list, ft_lstnew(cmd));
 	return (1);
 }
-
-

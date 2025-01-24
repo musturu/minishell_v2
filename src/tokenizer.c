@@ -14,7 +14,7 @@
 
 static char	*getwordvalue(char **str, char **ret);
 
-static e_TokenType	get_token_type(char *str)
+static	e_TokenType	get_token_type(char *str)
 {
 	if (!*str)
 		return (TOKEN_EOF);
@@ -35,7 +35,7 @@ static e_TokenType	get_token_type(char *str)
 static char	*get_token_value(char *str, e_TokenType type)
 {
 	char	*ret;
-	
+
 	ret = NULL;
 	if (type == TOKEN_EOF)
 		return (ft_strdup("EOF"));
@@ -65,7 +65,6 @@ int	append_token(char **str, t_list **lst)
 	return (1);
 }
 
-
 static char	*getwordvalue(char **str, char **ret)
 {
 	char	*tmp;
@@ -74,24 +73,25 @@ static char	*getwordvalue(char **str, char **ret)
 	if (*ret == NULL)
 		*ret = ft_strdup("");
 	tmp = *ret;
-	if (*ret && !ft_istokenquotes(**str) && (!**str || ft_istokenchar(**str) || ft_isspace(**str)))
+	if (*ret && !ft_istokenquotes(**str)
+		&& (!**str || ft_istokenchar(**str) || ft_isspace(**str)))
 	{
 		tmp = ft_strdup(*ret);
 		free(*ret);
-		return tmp;
+		return (tmp);
 	}
 	if (**str != '"' && **str != '\'')
 		load = ft_substr(*str, 0, space_until_next(*str));
 	else
+	{
 		if (ft_strchr(*str, **str))
-			load = ft_substr(*str, 0, ft_strchr(*str + 1, **str) - *str  );
+			load = ft_substr(*str, 0, ft_strchr(*str + 1, **str) - *str);
 		else
-		 return NULL;
+			return (NULL);
+	}
 	*ret = ft_strjoin(*ret, load);
 	*str += ft_strlen(load);
 	free(tmp);
 	free(load);
 	return (getwordvalue(str, ret));
 }
-
-
