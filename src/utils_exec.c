@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_exec.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 20:53:58 by lmoricon          #+#    #+#             */
+/*   Updated: 2025/01/24 20:55:43 by lmoricon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 #include <stdio.h>
 
-//actually tells us if process needs a fork or not
 char	is_builtin(char *cmd)
 {
 	if (!cmd)
@@ -23,7 +34,7 @@ char	is_builtin(char *cmd)
 	return (-1);
 }
 
-int exec_builtin(char *cmd, char **argv, char ***en, int *ret)
+int	exec_builtin(char *cmd, char **argv, char ***en, int *ret)
 {
 	int	r;
 
@@ -42,18 +53,17 @@ int exec_builtin(char *cmd, char **argv, char ***en, int *ret)
 	if (!ft_strncmp(cmd, "unset", 5))
 		r = (unset(argv, en));
 	*ret = r;
-	return r;
-
+	return (r);
 }
 
-char **listomap(char *cmd, t_list *list)
+char	**listomap(char *cmd, t_list *list)
 {
-	int i;
-	int size;
-	char **mat;
+	int		i;
+	int		size;
+	char	**mat;
 
 	size = ft_lstsize(list);
-	mat = (char **)ft_calloc(sizeof(char *) , (size + 2));
+	mat = (char **)ft_calloc(sizeof(char *), (size + 2));
 	mat[0] = ft_strdup(cmd);
 	i = 1;
 	while ((list))
@@ -75,8 +85,8 @@ int	pipes(t_list **lst)
 	cur = (*lst)->content;
 	next = (*lst)->next->content;
 	if (pipe(piped) == -1)
-			return (0);
-		next->infd = piped[0];
-		cur->outfd = piped[1];
+		return (0);
+	next->infd = piped[0];
+	cur->outfd = piped[1];
 	return (1);
 }

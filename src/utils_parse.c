@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_parse.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 20:51:11 by lmoricon          #+#    #+#             */
+/*   Updated: 2025/01/24 20:53:30 by lmoricon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdio.h>
-
 
 char	is_break(t_list *tokens)
 {
@@ -18,7 +28,9 @@ char	is_after_break(t_list *tokens)
 	if (tokens->prev == NULL)
 		return (1);
 	tkn = tokens->prev->content;
-	if (tkn == TOKEN_WORD && tokens->prev->prev && ((t_token *)(tokens->prev->prev->content))->type == TOKEN_REDIR_OUT)
+	if (tkn == TOKEN_WORD && tokens->prev->prev
+		&& ((t_token *)(tokens->prev->prev->content))->type
+		== TOKEN_REDIR_OUT)
 		return (1);
 	return (tkn->type == TOKEN_PIPE);
 }
@@ -28,7 +40,6 @@ char	is_string(e_TokenType type)
 	return (type == TOKEN_WORD);
 }
 
-
 char	is_redirection(e_TokenType type)
 {
 	return (type == TOKEN_REDIR_OUT
@@ -37,7 +48,7 @@ char	is_redirection(e_TokenType type)
 		|| type == TOKEN_REDIR_APPEND);
 }
 
-e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
+e_TokenType	get_command_inconnect(t_list **tokens, int isfirst)
 {
 	t_token	*tkn;
 
@@ -49,5 +60,5 @@ e_TokenType get_command_inconnect(t_list **tokens, int isfirst)
 		ft_lst_remove_node(tokens, *tokens, free_token);
 		return (TOKEN_PIPE);
 	}
-	return 0;
+	return (0);
 }
