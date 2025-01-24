@@ -6,7 +6,7 @@
 /*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 21:04:23 by lmoricon          #+#    #+#             */
-/*   Updated: 2025/01/24 21:14:16 by lmoricon         ###   ########.fr       */
+/*   Updated: 2025/01/24 21:34:57 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	execute(t_list **parsed_list, char ***env)
 	cur = (*parsed_list)->content;
 	if (cur->outconnect == TOKEN_PIPE && !pipes(parsed_list))
 		return (0);
-	if (NEEDFORK(cur->cmd))
+	if (is_builtin((cur->cmd)) != 1)
 		pid = fork();
 	if (!pid)
 	{
@@ -136,6 +136,6 @@ void	execute_fork(t_command **cur, char ***env)
 		exec_builtin((*cur)->cmd, (*cur)->argv, env, &g_status);
 	else if (execve((*cur)->cmd, (*cur)->argv, *env) == -1)
 		printf("command %s not found\n", (*cur)->cmd);
-	if (NEEDFORK((*cur)->cmd))
+	if (is_builtin((*cur)->cmd) != 1)
 		exit(g_status);
 }

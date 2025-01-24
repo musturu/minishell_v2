@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:51:11 by lmoricon          #+#    #+#             */
-/*   Updated: 2025/01/24 20:53:30 by lmoricon         ###   ########.fr       */
+/*   Updated: 2025/01/24 21:37:26 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ char	is_after_break(t_list *tokens)
 	return (tkn->type == TOKEN_PIPE);
 }
 
-char	is_string(e_TokenType type)
+char	is_string(t_TokenType type)
 {
 	return (type == TOKEN_WORD);
 }
 
-char	is_redirection(e_TokenType type)
+char	is_redirection(t_TokenType type)
 {
 	return (type == TOKEN_REDIR_OUT
 		|| type == TOKEN_REDIR_IN
@@ -48,7 +48,7 @@ char	is_redirection(e_TokenType type)
 		|| type == TOKEN_REDIR_APPEND);
 }
 
-e_TokenType	get_command_inconnect(t_list **tokens, int isfirst)
+t_TokenType	get_command_inconnect(t_list **tokens, int isfirst)
 {
 	t_token	*tkn;
 

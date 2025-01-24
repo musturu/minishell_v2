@@ -6,7 +6,7 @@
 /*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2025/01/24 21:23:51 by lmoricon         ###   ########.fr       */
+/*   Updated: 2025/01/24 21:37:26 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	*getwordvalue(char **str, char **ret);
 
-static	e_TokenType	get_token_type(char *str)
+static	t_TokenType	get_token_type(char *str)
 {
 	if (!*str)
 		return (TOKEN_EOF);
@@ -32,7 +32,7 @@ static	e_TokenType	get_token_type(char *str)
 		return (TOKEN_WORD);
 }
 
-static char	*get_token_value(char *str, e_TokenType type)
+static char	*get_token_value(char *str, t_TokenType type)
 {
 	char	*ret;
 
