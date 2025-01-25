@@ -135,7 +135,7 @@ void	execute_fork(t_command **cur, char ***env)
 	if (is_builtin((*cur)->cmd) != -1)
 		exec_builtin((*cur)->cmd, (*cur)->argv, env, &g_status);
 	else if (execve((*cur)->cmd, (*cur)->argv, *env) == -1)
-		printf("command %s not found\n", (*cur)->cmd);
+		write(2, "command not found\n", 18);
 	if (is_builtin((*cur)->cmd) != 1)
 		exit(g_status);
 }
