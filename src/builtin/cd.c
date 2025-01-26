@@ -26,8 +26,14 @@ int	cd(char **argv)
 	if (i == 1)
 		return (chdir(getenv("HOME")));
 	if (i != 2)
-		return (printf("Error: Wrong Argument count :)\n"));
+	{
+		printf("Error: Wrong Argument count :)\n");
+		return (1);
+	}
 	if (opendir(argv[1]) == NULL)
-		return (printf("Error cd: no such file or directory :)\n"));
+	{
+		printf("Error cd: no such file or directory :)\n");
+		return (127);
+	}
 	return (chdir(argv[1]));
 }

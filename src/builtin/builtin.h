@@ -17,7 +17,7 @@
 
 int	cd(char **argv);
 int	echo(char **argv);
-int	ft_exit(void);
+int	ft_exit(char **argv);
 int	pwd(void);
 int	env(char **env);
 int	export(char **argv, char ***env);

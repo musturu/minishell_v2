@@ -54,7 +54,7 @@ static int	redir_in(t_command *cmd)
 		}
 		else
 		{
-			if (access(cmd->outpath + 1, R_OK) == 0)
+			if (access(cmd->inpath + 1, R_OK) == 0)
 				cmd->infd = open(cmd->inpath + 1, O_RDONLY);
 			else
 				return (0);
@@ -135,7 +135,10 @@ void	execute_fork(t_command **cur, char ***env)
 	if (is_builtin((*cur)->cmd) != -1)
 		exec_builtin((*cur)->cmd, (*cur)->argv, env, &g_status);
 	else if (execve((*cur)->cmd, (*cur)->argv, *env) == -1)
+	{
 		write(2, "command not found\n", 18);
+		g_status = 127;
+	}
 	if (is_builtin((*cur)->cmd) != 1)
 		exit(g_status);
 }

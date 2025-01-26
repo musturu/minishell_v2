@@ -19,13 +19,12 @@ int	already_present(char *str, char **env)
 	char	*eq;
 
 	i = -1;
-	len = ft_strlen(str);
 	eq = ft_strchr(str, '=');
-	if (eq != NULL)
-		len = eq - str - 1;
+	len = eq ? (eq - str) : ft_strlen(str);
 	while (env[++i])
 	{
-		if (!ft_strncmp(str, env[i], len - 1))
+		if (!ft_strncmp(str, env[i], len)
+			&& (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 	}
 	return (-1);
@@ -34,64 +33,66 @@ int	already_present(char *str, char **env)
 void	matrixdup(char ***dst, char ***src)
 {
 	int	i;
+	int	len;
 
-	i = 0;
-	if (!*src)
+	len = 0;
+	if (!src || !*src)
 	{
 		*dst = NULL;
 		return ;
 	}
-	while ((*src)[i])
-	{
+	while ((*src)[len])
+		len++;
+	*dst = (char **)malloc((len + 1) * sizeof(char *));
+	if (!*dst)
+		return ;
+	for (i = 0; i < len; i++)
 		(*dst)[i] = ft_strdup((*src)[i]);
-		free(*src[i]);
-		i++;
-	}
+	(*dst)[len] = NULL;
+	for (i = 0; i < len; i++)
+		free((*src)[i]);
 	free(*src);
-	src = dst;
+	*src = *dst;
 }
 
 void	update_exp(char *str, char ***env)
 {
-	char	*eq;
-	int		i;
+	int	i;
 
-	eq = ft_strchr(str, '=');
-	if (!eq)
+	i = already_present(str, *env);
+	if (i == -1)
 		return ;
-	if (eq != NULL)
-	{
-		i = already_present(str, *env);
-		free((*env)[i]);
-		(*env)[i] = ft_strdup(str);
-	}
+	free((*env)[i]);
+	(*env)[i] = ft_strdup(str);
 }
 
 void	insert_exp(char *str, char ***env)
 {
-	char	*tmp;
-	char	*nulstr;
-	char	**envcpy;
+	char	**new_env;
 	int		i;
 
 	i = 0;
 	while ((*env)[i])
 		i++;
-	envcpy = ft_calloc(i + 2, sizeof(char **));
-	matrixdup(&envcpy, env);
-	if (ft_strchr(str, '='))
+	new_env = ft_calloc(i + 2, sizeof(char *));
+	if (!new_env)
+		return ;
+	for (int j = 0; j < i; j++)
+		new_env[j] = ft_strdup((*env)[j]);
+	if (ft_strchr(str, '=') != NULL)
 	{
-		(*env)[i] = ft_strdup(str);
-		(*env)[i + 1] = NULL;
+		new_env[i] = ft_strdup(str);
+		new_env[i + 1] = NULL;
 	}
 	else
 	{
-		tmp = ft_strdup(str);
-		nulstr = ft_strjoin(str, "=\'\'");
-		(*env)[i] = nulstr;
-		(*env)[i + 1] = NULL;
-		free(tmp);
+		new_env[i] = ft_strjoin(str, "=''");
+		new_env[i + 1] = NULL;
 	}
+	for (int j = 0; j < i; j++)
+		free((*env)[j]);
+	free(*env);
+	*env = new_env;
 }
 
 int	export(char **argv, char ***en)
@@ -103,7 +104,7 @@ int	export(char **argv, char ***en)
 		return (env(*en));
 	while (argv[++i])
 	{
-		if (already_present(argv[i], *en))
+		if (already_present(argv[i], *en) != -1)
 			update_exp(argv[i], en);
 		else
 			insert_exp(argv[i], en);

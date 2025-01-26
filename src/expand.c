@@ -39,7 +39,7 @@ char	*expand_var(char *var, char **env)
 	start = 0;
 	if (var[start] == '?')
 	{
-		ret = ft_itoa(g_status);
+		ret = ft_itoa(g_status % 255);
 		return (ret);
 	}
 	while (ft_isalnum(var[start]) || var[start] == '_')

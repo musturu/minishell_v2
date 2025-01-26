@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 static t_list	*parser(t_list **tokens, t_list **parsed_list);
-static void		read_input(char **env);
+static void		read_input(char ***env);
 
 int	g_status;
 
@@ -26,18 +26,20 @@ int	main(int argc, char **argv, char **env)
 	g_status = 0;
 	env = ft_matdup(env);
 	ft_signals();
-	read_input(env);
+	read_input(&env);
 	free_matrix(env);
-	return (0);
+	if (g_status == -1000)
+		exit(0);
+	return (-g_status);
 }
 
-static void	read_input(char **env)
+static void	read_input(char ***env)
 {
 	char	*str;
 	t_list	*tlist;
 	t_list	*plist;
 
-	while (g_status != -1)
+	while (g_status >= 0)
 	{
 		tlist = NULL;
 		plist = NULL;
@@ -52,10 +54,10 @@ static void	read_input(char **env)
 		add_history(str);
 		tlist = tokenize(str, &tlist);
 		free(str);
-		tlist = expand(&tlist, env);
+		tlist = expand(&tlist, *env);
 		plist = parser(&tlist, &plist);
 		ft_lstclear(&tlist, free_token);
-		execute(&plist, &env);
+		execute(&plist, env);
 		ft_lstclear(&plist, free_command);
 	}
 }

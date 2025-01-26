@@ -45,7 +45,7 @@ int	exec_builtin(char *cmd, char **argv, char ***en, int *ret)
 	if (!ft_strncmp(cmd, "env", 3))
 		r = env(*en);
 	if (!ft_strncmp(cmd, "exit", 4))
-		r = ft_exit();
+		r = ft_exit(argv);
 	if (!ft_strncmp(cmd, "pwd", 3))
 		r = pwd();
 	if (!ft_strncmp(cmd, "export", 5))
