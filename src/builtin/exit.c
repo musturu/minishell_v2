@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:34:14 by lmoricon          #+#    #+#             */
-/*   Updated: 2025/01/24 20:34:31 by lmoricon         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:30:42 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	ft_exit(char **argv)
 		g_status = 255;
 		return (255);
 	}
-	g_status = ft_atoi(argv[1]);
-	g_status = -g_status;
+	g_status = -ft_atoi(argv[1]);
 	return (g_status);
 }

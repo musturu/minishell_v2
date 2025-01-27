@@ -6,7 +6,7 @@
 #    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by lmoricon          #+#    #+#              #
-#    Updated: 2025/01/24 21:24:11 by lmoricon         ###   ########.fr        #
+#    Updated: 2025/01/27 18:22:04 by lmoricon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ else ifeq ($(CURRENT_OS), Darwin)
 endif
 
 NAME 		= minishell
-CFLAGS 		= -Wall -Wextra -Werror -g
+CFLAGS 		= -Wall -Wextra -Werror -gdwarf-4 -g
 CC 			= cc
 SRC_DIR 	= src
 OBJ_DIR 	= obj

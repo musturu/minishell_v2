@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:37:47 by lmoricon          #+#    #+#             */
-/*   Updated: 2025/01/24 20:46:58 by lmoricon         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:29:48 by lmoricon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	already_present(char *str, char **env)
 		len = ft_strlen(str);
 	while (env[i])
 	{
-		if (!ft_strncmp(str, env[i], len) && (env[i][len] == '=' || env[i][len] == '\0'))
+		if (!ft_strncmp(str, env[i], len)
+			&& (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 		i++;
 	}
@@ -42,26 +43,20 @@ void	matrixdup(char ***dst, char ***src)
 	if (!src || !*src)
 	{
 		*dst = NULL;
-		return;
+		return ;
 	}
 	while ((*src)[len])
 		len++;
 	*dst = (char **)malloc((len + 1) * sizeof(char *));
 	if (!*dst)
-		return;
-	i = 0;
-	while (i < len)
-	{
+		return ;
+	i = -1;
+	while (++i < len)
 		(*dst)[i] = ft_strdup((*src)[i]);
-		i++;
-	}
 	(*dst)[len] = NULL;
 	i = 0;
 	while (i < len)
-	{
-		free((*src)[i]);
-		i++;
-	}
+		free((*src)[i++]);
 	free(*src);
 	*src = *dst;
 }
@@ -89,28 +84,18 @@ void	insert_exp(char *str, char ***env)
 		i++;
 	new_env = ft_calloc(i + 2, sizeof(char *));
 	if (!new_env)
-		return;
-	j = 0;
-	while (j < i)
-	{
+		return ;
+	j = -1;
+	while (++j < i)
 		new_env[j] = ft_strdup((*env)[j]);
-		j++;
-	}
 	if (ft_strchr(str, '=') != NULL)
-	{
 		new_env[i] = ft_strdup(str);
-	}
 	else
-	{
 		new_env[i] = ft_strjoin(str, "=''");
-	}
 	new_env[i + 1] = NULL;
 	j = 0;
 	while (j < i)
-	{
-		free((*env)[j]);
-		j++;
-	}
+		free((*env)[j++]);
 	free(*env);
 	*env = new_env;
 }

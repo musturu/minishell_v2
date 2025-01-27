@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/11 09:13:33 by lmoricon          #+#    #+#              #
-#    Updated: 2024/01/15 18:01:32 by lmoricon         ###   ########.fr        #
+#    Updated: 2025/01/27 18:22:28 by lmoricon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ BOUTFILE = $(BSRCS:.c=.o)
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -gdwarf-4 -g
 
 RM = rm -f
 

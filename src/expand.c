@@ -90,5 +90,6 @@ char	*remove_quotes(char *str)
 		i++;
 	}
 	result[j] = '\0';
+	free(str);
 	return (result);
 }
